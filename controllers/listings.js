@@ -1,8 +1,53 @@
 const Listing = require("../models/listing.js");
 
 module.exports.index = async(req, res) => {
-    const allListings = await Listing.find({});
-    res.render("listings/index.ejs", {allListings});
+    const { search, category } = req.query;
+    let query = {};
+
+    if (category && category.trim() !== "") {
+        const catRegex = new RegExp(category.trim(), "i");
+        query.$or = [
+            { category: catRegex },
+            { title: catRegex },
+            { description: catRegex },
+            { location: catRegex },
+            { country: catRegex }
+        ];
+    } else if (search && search.trim() !== "") {
+        const searchRegex = new RegExp(search.trim(), "i");
+        query.$or = [
+            { title: searchRegex },
+            { location: searchRegex },
+            { country: searchRegex },
+            { description: searchRegex },
+            { category: searchRegex }
+        ];
+    }
+
+    const allListings = await Listing.find(query);
+    res.render("listings/index.ejs", { 
+        allListings, 
+        search: search ? search.trim() : "", 
+        category: category ? category.trim() : "" 
+    });
+};
+
+module.exports.searchSuggestions = async(req, res) => {
+    const { q } = req.query;
+    if (!q || q.trim() === "") {
+        return res.json([]);
+    }
+    const searchRegex = new RegExp(q.trim(), "i");
+    const suggestions = await Listing.find({
+        $or: [
+            { title: searchRegex },
+            { location: searchRegex },
+            { country: searchRegex },
+            { description: searchRegex }
+        ]
+    }).select("title location country image price _id").limit(6);
+
+    res.json(suggestions);
 };
 
 module.exports.renderNewForm = (req, res) => {

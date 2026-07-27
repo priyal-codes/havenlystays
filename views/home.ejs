@@ -299,12 +299,13 @@
             "Discover handpicked luxury villas, beachfront sanctuaries, and cozy mountain chalets curated for your perfect getaway."
         </p>
 
-        <!-- Centered Floating Search Bar -->
-        <div class="hero-search-container">
+        <!-- Centered Floating Search Bar with Live Suggestions Dropdown -->
+        <div class="hero-search-container position-relative">
             <form action="/listings" method="GET" class="row g-2 align-items-center">
-                <div class="col-md-4 search-field-divider ps-2">
+                <div class="col-md-4 search-field-divider ps-2 position-relative">
                     <div class="search-field-title"><i class="fa-solid fa-location-dot text-danger me-1"></i> Destination</div>
-                    <input type="text" name="search" class="form-control search-field-input" placeholder="Where is your heart taking you?">
+                    <input type="text" id="heroSearchInput" name="search" class="form-control search-field-input" autocomplete="off" placeholder="Where is your heart taking you?">
+                    <div id="heroSearchDropdown" class="search-suggestions-dropdown d-none text-start"></div>
                 </div>
                 <div class="col-md-3 search-field-divider ps-2">
                     <div class="search-field-title"><i class="fa-regular fa-calendar-check text-primary me-1"></i> Dates</div>
@@ -341,31 +342,31 @@
             <h3 class="fw-bold text-dark mb-0">What style of stay are you craving?</h3>
         </div>
         <div class="d-flex flex-wrap justify-content-center gap-3">
-            <a href="/listings" class="category-item">
+            <a href="/listings?category=Trending" class="category-item">
                 <i class="fa-solid fa-fire text-danger"></i>
                 <span>Trending Stays</span>
             </a>
-            <a href="/listings" class="category-item">
+            <a href="/listings?category=Beachfront" class="category-item">
                 <i class="fa-solid fa-umbrella-beach text-info"></i>
                 <span>Beachfront</span>
             </a>
-            <a href="/listings" class="category-item">
+            <a href="/listings?category=Mountains" class="category-item">
                 <i class="fa-solid fa-mountain text-success"></i>
                 <span>Cabins & Peaks</span>
             </a>
-            <a href="/listings" class="category-item">
+            <a href="/listings?category=Iconic+cities" class="category-item">
                 <i class="fa-solid fa-mountain-city text-warning"></i>
                 <span>Iconic Cities</span>
             </a>
-            <a href="/listings" class="category-item">
+            <a href="/listings?category=Pools" class="category-item">
                 <i class="fa-solid fa-person-swimming text-primary"></i>
                 <span>Private Pools</span>
             </a>
-            <a href="/listings" class="category-item">
+            <a href="/listings?category=Castles" class="category-item">
                 <i class="fa-solid fa-fort-awesome text-secondary"></i>
                 <span>Heritage Castles</span>
             </a>
-            <a href="/listings" class="category-item">
+            <a href="/listings?category=Arctic" class="category-item">
                 <i class="fa-solid fa-snowflake text-info"></i>
                 <span>Arctic Escapes</span>
             </a>
@@ -494,3 +495,64 @@
     </div>
 
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const heroInput = document.getElementById("heroSearchInput");
+    const heroDropdown = document.getElementById("heroSearchDropdown");
+
+    if (heroInput && heroDropdown) {
+        let debounceTimer;
+
+        heroInput.addEventListener("input", (e) => {
+            clearTimeout(debounceTimer);
+            const query = e.target.value.trim();
+
+            if (query.length < 1) {
+                heroDropdown.classList.add("d-none");
+                heroDropdown.innerHTML = "";
+                return;
+            }
+
+            debounceTimer = setTimeout(async () => {
+                try {
+                    const res = await fetch(`/listings/api/search?q=${encodeURIComponent(query)}`);
+                    const data = await res.json();
+
+                    if (data && data.length > 0) {
+                        let html = "";
+                        data.forEach(item => {
+                            const imgUrl = item.image && item.image.url ? item.image.url : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=100';
+                            html += `
+                                <a href="/listings/${item._id}" class="suggestion-item">
+                                    <img src="${imgUrl}" class="suggestion-img" alt="${item.title}"/>
+                                    <div>
+                                        <p class="suggestion-title">${item.title}</p>
+                                        <p class="suggestion-sub"><i class="fa-solid fa-location-dot me-1 text-danger"></i>${item.location || ''}, ${item.country || ''}</p>
+                                    </div>
+                                    <div class="ms-auto text-end">
+                                        <span class="badge bg-danger">₹${item.price ? item.price.toLocaleString("en-IN") : 'N/A'}</span>
+                                    </div>
+                                </a>
+                            `;
+                        });
+                        heroDropdown.innerHTML = html;
+                        heroDropdown.classList.remove("d-none");
+                    } else {
+                        heroDropdown.innerHTML = `<div class="p-3 text-center text-secondary small"><i class="fa-solid fa-ghost me-1"></i> No matching stays found</div>`;
+                        heroDropdown.classList.remove("d-none");
+                    }
+                } catch (err) {
+                    console.error("Hero search suggestion error:", err);
+                }
+            }, 250);
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!heroInput.contains(e.target) && !heroDropdown.contains(e.target)) {
+                heroDropdown.classList.add("d-none");
+            }
+        });
+    }
+});
+</script>

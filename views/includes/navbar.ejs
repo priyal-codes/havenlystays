@@ -33,6 +33,13 @@
 }
 
 /* 3-in-1 Pill Search Bar */
+.nav-search-wrapper {
+    position: relative;
+    max-width: 440px;
+    margin: 0 auto;
+    width: 100%;
+}
+
 .nav-search-pill {
     background: #ffffff;
     border: 1px solid #e2e8f0;
@@ -43,11 +50,9 @@
     gap: 0.8rem;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
     transition: all 0.25s ease;
-    max-width: 420px;
-    margin: 0 auto;
 }
 
-.nav-search-pill:hover {
+.nav-search-pill:hover, .nav-search-pill:focus-within {
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
     border-color: #cbd5e1;
 }
@@ -84,6 +89,62 @@
 .nav-search-btn:hover {
     background: #e0313c;
     transform: scale(1.08);
+}
+
+/* Live Dropdown Suggestions Box */
+.search-suggestions-dropdown {
+    position: absolute;
+    top: 115%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.25rem;
+    box-shadow: 0 15px 35px rgba(15, 23, 42, 0.15);
+    z-index: 1050;
+    overflow: hidden;
+    max-height: 380px;
+    overflow-y: auto;
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    color: #0f172a;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background 0.2s ease;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover {
+    background: #fff1f2;
+    color: #0f172a;
+}
+
+.suggestion-img {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.suggestion-title {
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.suggestion-sub {
+    font-size: 0.78rem;
+    color: #64748b;
+    margin: 0;
 }
 
 /* Nav Action Buttons */
@@ -179,17 +240,19 @@
 
         <!-- Navbar Content -->
         <div class="collapse navbar-collapse" id="havenlyNavbar">
-            <!-- Center Search Bar -->
-            <div class="mx-auto my-2 my-lg-0 w-100" style="max-width: 440px;">
+            <!-- Center Search Bar with Autocomplete Dropdown -->
+            <div class="nav-search-wrapper my-2 my-lg-0">
                 <form action="/listings" method="GET">
                     <div class="nav-search-pill">
                         <i class="fa-solid fa-location-dot text-danger small"></i>
-                        <input type="text" name="search" class="nav-search-input" placeholder="Search destinations, villas, beachfronts..."/>
+                        <input type="text" id="navSearchInput" name="search" class="nav-search-input" autocomplete="off" placeholder="Search destinations, villas, beachfronts..."/>
                         <button type="submit" class="nav-search-btn" title="Search Stays">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                     </div>
                 </form>
+                <!-- Live Suggestions Dropdown Box -->
+                <div id="navSearchDropdown" class="search-suggestions-dropdown d-none"></div>
             </div>
 
             <!-- Right Actions -->
@@ -211,3 +274,65 @@
         </div>
     </div>
 </nav>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const navInput = document.getElementById("navSearchInput");
+    const navDropdown = document.getElementById("navSearchDropdown");
+
+    if (navInput && navDropdown) {
+        let debounceTimer;
+
+        navInput.addEventListener("input", (e) => {
+            clearTimeout(debounceTimer);
+            const query = e.target.value.trim();
+
+            if (query.length < 1) {
+                navDropdown.classList.add("d-none");
+                navDropdown.innerHTML = "";
+                return;
+            }
+
+            debounceTimer = setTimeout(async () => {
+                try {
+                    const res = await fetch(`/listings/api/search?q=${encodeURIComponent(query)}`);
+                    const data = await res.json();
+
+                    if (data && data.length > 0) {
+                        let html = "";
+                        data.forEach(item => {
+                            const imgUrl = item.image && item.image.url ? item.image.url : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=100';
+                            html += `
+                                <a href="/listings/${item._id}" class="suggestion-item">
+                                    <img src="${imgUrl}" class="suggestion-img" alt="${item.title}"/>
+                                    <div>
+                                        <p class="suggestion-title">${item.title}</p>
+                                        <p class="suggestion-sub"><i class="fa-solid fa-location-dot me-1 text-danger"></i>${item.location || ''}, ${item.country || ''}</p>
+                                    </div>
+                                    <div class="ms-auto text-end">
+                                        <span class="badge bg-danger">₹${item.price ? item.price.toLocaleString("en-IN") : 'N/A'}</span>
+                                    </div>
+                                </a>
+                            `;
+                        });
+                        navDropdown.innerHTML = html;
+                        navDropdown.classList.remove("d-none");
+                    } else {
+                        navDropdown.innerHTML = `<div class="p-3 text-center text-secondary small"><i class="fa-solid fa-ghost me-1"></i> No matching stays found</div>`;
+                        navDropdown.classList.remove("d-none");
+                    }
+                } catch (err) {
+                    console.error("Search suggestion error:", err);
+                }
+            }, 250);
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", (e) => {
+            if (!navInput.contains(e.target) && !navDropdown.contains(e.target)) {
+                navDropdown.classList.add("d-none");
+            }
+        });
+    }
+});
+</script>

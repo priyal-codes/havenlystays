@@ -21,6 +21,9 @@ router
 );
 
 
+// Search Suggestions API
+router.get("/api/search", wrapAsync(listingController.searchSuggestions));
+
 //New Route
 router.get("/new", isLoggedIn, listingController.renderNewForm);
 
