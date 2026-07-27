@@ -66,11 +66,6 @@ const sessionOptions = {
 };
 
 
-// //Root path
-// app.get("/", (req, res) => {
-//     res.send("Hi, I am root");
-// });
-
 app.use(session(sessionOptions));
 app.use(flash());
 
@@ -86,6 +81,18 @@ app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     next();
+});
+
+// Root path - Home Page
+const Listing = require("./models/listing.js");
+app.get("/", async (req, res, next) => {
+    try {
+        res.locals.isFullWidth = true;
+        const featuredListings = await Listing.find({}).limit(6);
+        res.render("home.ejs", { featuredListings });
+    } catch(err) {
+        next(err);
+    }
 });
 
 // app.get("/demouser", async(req, res) => {

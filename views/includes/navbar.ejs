@@ -1,52 +1,81 @@
 <style>
-    .search-btn{
+.brand-title {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #fe424d;
+    letter-spacing: -0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+.brand-title:hover {
+    color: #e0313c;
+}
+.search-btn {
     background-color: #fe424d;
     color: #fff;
     border-radius: 25px;
-    padding: 0 1rem 0 1rem;
+    padding: 0.4rem 1.2rem;
+    transition: all 0.2s ease-in-out;
 }
-
 .search-btn:hover {
-    background-color: #fe424d;
+    background-color: #e0313c;
     color: #fff;
+    transform: scale(1.03);
 }
-
-.search-btn i{
+.search-btn i {
     display: inline;
-    margin-right: 0.5rem;
+    margin-right: 0.4rem;
 }
-
-.search-inp{
+.search-inp {
     border-radius: 25px;
-    padding: 0.5rem 3rem 0.5rem 3rem;
-    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.95rem;
+    border: 1px solid #ddd;
+}
+.search-inp:focus {
+    box-shadow: 0 0 0 3px rgba(254, 66, 77, 0.2);
+    border-color: #fe424d;
+}
+.host-btn {
+    border-radius: 20px;
+    padding: 0.4rem 1rem;
+    font-weight: 600;
+}
+.host-btn:hover {
+    background-color: #f8f9fa;
 }
 </style>
 
-<nav class="navbar navbar-expand-md bg-light border-bottom sticky-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
+<nav class="navbar navbar-expand-md bg-white border-bottom sticky-top shadow-sm px-3">
+    <div class="container-fluid px-2">
+        <a class="navbar-brand brand-title" href="/">
+            <i class="fa-regular fa-compass"></i>
+            <span>Havenly Stays</span>
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link" href="/listings">Explore</a>
+            <div class="navbar-nav ms-2">
+                <a class="nav-link fw-semibold" href="/listings">Explore All Stays</a>
             </div>
             <div class="navbar-nav ms-auto">
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2 search-inp" type="search" placeholder="Search destinations"/>
+                <form class="d-flex" role="search" action="/listings">
+                    <input class="form-control me-2 search-inp" type="search" placeholder="Search destinations..."/>
                     <button class="btn search-btn" type="submit">
                         <i class="fa-solid fa-magnifying-glass"></i>Search</button>
                 </form>
             </div>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/listings/new">Airbnb your home</a>
+            <div class="navbar-nav ms-auto align-items-center">
+                <a class="nav-link host-btn text-secondary me-2" href="/listings/new">Become a Host</a>
                 <% if(!currUser) { %>
-                <a class="nav-link" href="/signup"><b>Sign up</b></a>
-                <a class="nav-link" href="/login"><b>Log in</b></a>
+                <a class="nav-link btn btn-outline-danger me-2 rounded-pill px-3 py-1 text-danger" href="/signup">Sign up</a>
+                <a class="nav-link btn btn-danger text-white rounded-pill px-3 py-1" href="/login">Log in</a>
                 <% } %> <% if(currUser) { %>
-                <a class="nav-link" href="/logout"><b>Log out</b></a>
+                <span class="navbar-text me-3 text-secondary fw-semibold">Hi, <%= currUser.username %></span>
+                <a class="nav-link btn btn-outline-secondary rounded-pill px-3 py-1" href="/logout">Log out</a>
                 <% } %>
             </div>
         </div>
