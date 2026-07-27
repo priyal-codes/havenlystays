@@ -1,14 +1,197 @@
-<footer>
-    <div class="f-info">
-        <div class="f-info-socials">
-        <i class="fa-brands fa-square-facebook"></i>
-        <i class="fa-brands fa-square-instagram"></i>
-        <i class="fa-brands fa-linkedin"></i>
+<style>
+/* Modern Dark Luxury Footer Styling */
+.main-footer {
+    background: #0f172a;
+    color: #94a3b8;
+    padding-top: 4.5rem;
+    padding-bottom: 2rem;
+    border-top: 1px solid #1e293b;
+    margin-top: auto;
+}
+
+.footer-brand-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    letter-spacing: -0.5px;
+}
+
+.footer-brand-title i {
+    color: #fe424d;
+}
+
+.footer-brand-text {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    line-height: 1.6;
+    margin-top: 1rem;
+    max-width: 320px;
+}
+
+.footer-heading {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.2px;
+}
+
+.footer-links-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links-list li {
+    margin-bottom: 0.75rem;
+}
+
+.footer-links-list a {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.footer-links-list a:hover {
+    color: #fe424d;
+    padding-left: 4px;
+}
+
+.footer-social-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #1e293b;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    margin-right: 0.6rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.footer-social-icon:hover {
+    background: #fe424d;
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(254, 66, 77, 0.4);
+}
+
+.footer-bottom-bar {
+    border-top: 1px solid #1e293b;
+    margin-top: 3.5rem;
+    padding-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.88rem;
+}
+
+.footer-legal-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.footer-legal-links a {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-legal-links a:hover {
+    color: #ffffff;
+}
+
+.footer-currency-badge {
+    background: #1e293b;
+    color: #ffffff;
+    padding: 0.35rem 0.9rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+</style>
+
+<footer class="main-footer">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Brand Column -->
+            <div class="col-lg-4 col-md-6">
+                <a href="/" class="footer-brand-title">
+                    <i class="fa-regular fa-compass"></i>
+                    <span>Havenly Stays</span>
+                </a>
+                <p class="footer-brand-text font-serif-italic">
+                    "Handpicked luxury villas, beachfront retreats, and mountain chalets designed for unforgettable journeys around the world."
+                </p>
+                <div class="mt-4">
+                    <a href="https://facebook.com" target="_blank" class="footer-social-icon" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://instagram.com" target="_blank" class="footer-social-icon" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://linkedin.com" target="_blank" class="footer-social-icon" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="https://github.com/priyal-codes/havenlystays" target="_blank" class="footer-social-icon" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                </div>
+            </div>
+
+            <!-- Explore Column -->
+            <div class="col-lg-2 col-md-6 col-6">
+                <h5 class="footer-heading">Explore</h5>
+                <ul class="footer-links-list">
+                    <li><a href="/listings">All Haven Stays</a></li>
+                    <li><a href="/listings">Trending Villas</a></li>
+                    <li><a href="/listings">Beachfront Suites</a></li>
+                    <li><a href="/listings">Mountain Chalets</a></li>
+                    <li><a href="/listings">Private Pools</a></li>
+                </ul>
+            </div>
+
+            <!-- Hosting Column -->
+            <div class="col-lg-3 col-md-6 col-6">
+                <h5 class="footer-heading">Hosting</h5>
+                <ul class="footer-links-list">
+                    <li><a href="/listings/new">Become a Host</a></li>
+                    <li><a href="/listings/new">Host Protection Guarantee</a></li>
+                    <li><a href="/listings/new">Responsible Hosting</a></li>
+                    <li><a href="/listings/new">Community Forum</a></li>
+                    <li><a href="/listings/new">Host Resources</a></li>
+                </ul>
+            </div>
+
+            <!-- Support Column -->
+            <div class="col-lg-3 col-md-6">
+                <h5 class="footer-heading">Support</h5>
+                <ul class="footer-links-list">
+                    <li><a href="/listings">Help Center</a></li>
+                    <li><a href="/listings">AirCover Protection</a></li>
+                    <li><a href="/listings">Cancellation Policy</a></li>
+                    <li><a href="/listings">Safety Guidelines</a></li>
+                    <li><a href="/listings">Contact Us</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="f-info-brand">&copy; Havenly Stays Private Limited</div>
-        <div class="f-info-links">
-            <a href="/privacy">Privacy</a>
-            <a href="/terms">Terms</a>
+
+        <!-- Bottom Bar -->
+        <div class="footer-bottom-bar">
+            <div>
+                &copy; <%= new Date().getFullYear() %> Havenly Stays Private Limited. All rights reserved.
+            </div>
+            <div class="footer-legal-links">
+                <a href="/listings">Privacy Policy</a>
+                <a href="/listings">Terms of Service</a>
+                <a href="/listings">Sitemap</a>
+            </div>
+            <div class="footer-currency-badge">
+                <i class="fa-solid fa-globe me-1"></i> English (IN) • ₹ INR
+            </div>
         </div>
     </div>
 </footer>

@@ -1,81 +1,211 @@
 <style>
-.brand-title {
-    font-weight: 700;
-    font-size: 1.25rem;
+/* Modern Luxury Navbar Styling */
+.main-navbar {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid #f1f5f9;
+    padding: 0.85rem 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.navbar-brand-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+}
+
+.brand-icon {
+    font-size: 1.8rem;
     color: #fe424d;
-    letter-spacing: -0.5px;
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand-logo:hover .brand-icon {
+    transform: rotate(45deg);
+}
+
+.brand-text {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #fe424d;
+    letter-spacing: -0.6px;
+}
+
+/* 3-in-1 Pill Search Bar */
+.nav-search-pill {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 40px;
+    padding: 0.35rem 0.5rem 0.35rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    transition: all 0.25s ease;
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+.nav-search-pill:hover {
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+    border-color: #cbd5e1;
+}
+
+.nav-search-input {
+    border: none !important;
+    background: transparent !important;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #0f172a;
+    width: 100%;
+    outline: none;
+}
+
+.nav-search-input::placeholder {
+    color: #64748b;
+}
+
+.nav-search-btn {
+    background: #fe424d;
+    color: #ffffff;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.nav-search-btn:hover {
+    background: #e0313c;
+    transform: scale(1.08);
+}
+
+/* Nav Action Buttons */
+.nav-host-btn {
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: #334155 !important;
+    padding: 0.5rem 1.1rem;
+    border-radius: 20px;
+    transition: background 0.2s ease;
+    text-decoration: none;
+}
+
+.nav-host-btn:hover {
+    background: #f1f5f9;
+    color: #0f172a !important;
+}
+
+.btn-signup-pill {
+    border: 1.5px solid #fe424d;
+    color: #fe424d !important;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-radius: 25px;
+    padding: 0.4rem 1.2rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-signup-pill:hover {
+    background: #fff1f2;
+    color: #e0313c !important;
+}
+
+.btn-login-pill {
+    background: #fe424d;
+    color: #ffffff !important;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-radius: 25px;
+    padding: 0.45rem 1.25rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(254, 66, 77, 0.3);
+    text-decoration: none;
+}
+
+.btn-login-pill:hover {
+    background: #e0313c;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(254, 66, 77, 0.4);
+    color: #ffffff !important;
+}
+
+.user-badge-pill {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 25px;
+    padding: 0.4rem 1rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #0f172a;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    text-decoration: none;
 }
-.brand-title:hover {
-    color: #e0313c;
-}
-.search-btn {
-    background-color: #fe424d;
-    color: #fff;
-    border-radius: 25px;
-    padding: 0.4rem 1.2rem;
-    transition: all 0.2s ease-in-out;
-}
-.search-btn:hover {
-    background-color: #e0313c;
-    color: #fff;
-    transform: scale(1.03);
-}
-.search-btn i {
-    display: inline;
-    margin-right: 0.4rem;
-}
-.search-inp {
-    border-radius: 25px;
-    padding: 0.5rem 1.5rem;
-    font-size: 0.95rem;
-    border: 1px solid #ddd;
-}
-.search-inp:focus {
-    box-shadow: 0 0 0 3px rgba(254, 66, 77, 0.2);
-    border-color: #fe424d;
-}
-.host-btn {
-    border-radius: 20px;
-    padding: 0.4rem 1rem;
-    font-weight: 600;
-}
-.host-btn:hover {
-    background-color: #f8f9fa;
+
+.user-avatar-circle {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #fe424d;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 800;
 }
 </style>
 
-<nav class="navbar navbar-expand-md bg-white border-bottom sticky-top shadow-sm px-3">
-    <div class="container-fluid px-2">
-        <a class="navbar-brand brand-title" href="/">
-            <i class="fa-regular fa-compass"></i>
-            <span>Havenly Stays</span>
+<nav class="navbar navbar-expand-lg main-navbar sticky-top">
+    <div class="container-fluid px-1">
+        <!-- Logo -->
+        <a class="navbar-brand navbar-brand-logo" href="/">
+            <i class="fa-regular fa-compass brand-icon"></i>
+            <span class="brand-text">Havenly Stays</span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+
+        <!-- Mobile Toggler -->
+        <button class="navbar-toggler border-0 shadow-none ms-auto me-2" type="button" data-bs-toggle="collapse" data-bs-target="#havenlyNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav ms-2">
-                <a class="nav-link fw-semibold" href="/listings">Explore All Stays</a>
-            </div>
-            <div class="navbar-nav ms-auto">
-                <form class="d-flex" role="search" action="/listings">
-                    <input class="form-control me-2 search-inp" type="search" placeholder="Search destinations..."/>
-                    <button class="btn search-btn" type="submit">
-                        <i class="fa-solid fa-magnifying-glass"></i>Search</button>
+
+        <!-- Navbar Content -->
+        <div class="collapse navbar-collapse" id="havenlyNavbar">
+            <!-- Center Search Bar -->
+            <div class="mx-auto my-2 my-lg-0 w-100" style="max-width: 440px;">
+                <form action="/listings" method="GET">
+                    <div class="nav-search-pill">
+                        <i class="fa-solid fa-location-dot text-danger small"></i>
+                        <input type="text" name="search" class="nav-search-input" placeholder="Search destinations, villas, beachfronts..."/>
+                        <button type="submit" class="nav-search-btn" title="Search Stays">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
                 </form>
             </div>
-            <div class="navbar-nav ms-auto align-items-center">
-                <a class="nav-link host-btn text-secondary me-2" href="/listings/new">Become a Host</a>
+
+            <!-- Right Actions -->
+            <div class="d-flex align-items-center gap-2 ms-lg-auto mt-2 mt-lg-0">
+                <a class="nav-link fw-semibold text-dark me-2" href="/listings">Explore All</a>
+                <a class="nav-host-btn me-2" href="/listings/new">Become a Host</a>
+
                 <% if(!currUser) { %>
-                <a class="nav-link btn btn-outline-danger me-2 rounded-pill px-3 py-1 text-danger" href="/signup">Sign up</a>
-                <a class="nav-link btn btn-danger text-white rounded-pill px-3 py-1" href="/login">Log in</a>
-                <% } %> <% if(currUser) { %>
-                <span class="navbar-text me-3 text-secondary fw-semibold">Hi, <%= currUser.username %></span>
-                <a class="nav-link btn btn-outline-secondary rounded-pill px-3 py-1" href="/logout">Log out</a>
+                    <a class="btn-signup-pill me-1" href="/signup">Sign up</a>
+                    <a class="btn-login-pill" href="/login">Log in</a>
+                <% } else { %>
+                    <div class="user-badge-pill me-2">
+                        <div class="user-avatar-circle"><%= currUser.username ? currUser.username.charAt(0).toUpperCase() : 'U' %></div>
+                        <span><%= currUser.username %></span>
+                    </div>
+                    <a class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-bold" href="/logout">Log out</a>
                 <% } %>
             </div>
         </div>
