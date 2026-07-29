@@ -185,6 +185,18 @@
         white-space: nowrap !important;
         flex-shrink: 0 !important;
     }
+    .tax-info {
+        font-size: 0.55rem !important;
+        margin-top: 1px !important;
+        white-space: nowrap !important;
+        line-height: 1 !important;
+    }
+}
+.tax-info {
+    font-size: 0.72rem;
+    color: #dc2626;
+    font-weight: 600;
+    margin-top: 2px;
 }
 </style>
 
@@ -289,7 +301,10 @@
                             </div>
                             <p class="text-secondary small text-truncate mb-3"><%= listing.description || "Handpicked luxury stay experience curated for your perfect getaway." %></p>
                             <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                                <span class="stay-card-price">&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> <span class="text-secondary fw-normal small">/ night</span><i class="tax-info text-danger small fw-semibold" style="display: none;">&nbsp;(+18% GST)</i></span>
+                                <div class="stay-card-price-container">
+                                    <span class="stay-card-price">&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> <span class="text-secondary fw-normal small">/ night</span></span>
+                                    <div class="tax-info text-danger small fw-semibold" style="display: none;">+18% GST included</div>
+                                </div>
                                 <span class="btn btn-sm btn-danger rounded-pill px-3 py-1 fw-bold">View Stay</span>
                             </div>
                         </div>
@@ -312,14 +327,10 @@
 <script>
     let taxSwitch = document.getElementById("flexSwitchCheckDefault");
     if (taxSwitch) {
-        taxSwitch.addEventListener("click", () => {
+        taxSwitch.addEventListener("change", () => {
            let taxInfo = document.getElementsByClassName("tax-info");
            for (let info of taxInfo) {
-            if (info.style.display !== "inline") {
-                info.style.display = "inline";
-            } else {
-                info.style.display = "none";
-            }
+            info.style.display = taxSwitch.checked ? "block" : "none";
            }
         });
     }
