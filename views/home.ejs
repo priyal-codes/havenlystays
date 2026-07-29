@@ -283,13 +283,22 @@
     position: absolute;
     top: 1rem;
     left: 1rem;
-    background: rgba(15, 23, 42, 0.78);
+    background: rgba(15, 23, 42, 0.85);
     backdrop-filter: blur(8px);
-    color: #ffffff;
+    color: #ffffff !important;
     font-size: 0.78rem;
     font-weight: 600;
     padding: 0.35rem 0.85rem;
     border-radius: 2rem;
+    z-index: 10;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.stay-card:hover .stay-badge-location {
+    color: #ffffff !important;
+    background: rgba(15, 23, 42, 0.92);
+    z-index: 10;
 }
 
 .stay-card-price {
@@ -444,10 +453,10 @@
                         <a href="/listings/<%= listing._id %>" class="text-decoration-none">
                             <div class="stay-card">
                                 <div class="stay-card-img-wrapper">
+                                    <img src="<%= listing.image.url %>" class="stay-card-img" alt="<%= listing.title %>">
                                     <span class="stay-badge-location">
                                         <i class="fa-solid fa-location-dot me-1 text-danger"></i><%= listing.location %>, <%= listing.country %>
                                     </span>
-                                    <img src="<%= listing.image.url %>" class="stay-card-img" alt="<%= listing.title %>">
                                 </div>
                                 <div class="card-body p-4">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
