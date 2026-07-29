@@ -233,31 +233,65 @@
 
 @media (max-width: 767px) {
     .full-hero {
-        padding: 3rem 1rem 4rem 1rem;
-        min-height: 440px;
+        padding: 3rem 1rem;
+        min-height: 520px;
+    }
+    .hero-badge-pill {
+        font-size: 0.82rem;
+        padding: 0.35rem 1rem;
+        gap: 0.3rem;
+        max-width: 100%;
+        box-sizing: border-box;
     }
     .hero-main-heading {
-        font-size: 2.2rem;
+        font-size: 1.85rem !important;
+        line-height: 1.25;
+        margin-top: 0.75rem;
     }
     .hero-cursive-accent {
-        font-size: 2.6rem;
+        font-size: 2.15rem !important;
     }
     .hero-sub-text {
-        font-size: 1rem;
+        font-size: 0.9rem !important;
+        line-height: 1.45;
+        margin-top: 0.6rem;
     }
     .hero-search-container {
-        padding: 1.25rem 1rem;
-        margin-top: 1.75rem;
+        padding: 1rem;
+        margin-top: 1.25rem;
+        border-radius: 1.4rem;
+    }
+    .search-field-title {
+        font-size: 0.68rem;
+    }
+    .search-field-input {
+        font-size: 0.88rem !important;
+    }
+    .search-field-input::placeholder {
+        font-size: 0.82rem;
     }
     .search-field-divider {
         border-right: none !important;
         border-bottom: 1px solid #e2e8f0;
-        padding-bottom: 0.6rem;
-        margin-bottom: 0.6rem;
+        padding-bottom: 0.45rem;
+        margin-bottom: 0.45rem;
     }
     .btn-brand-search {
         width: 100%;
-        margin-top: 0.5rem;
+        margin-top: 0.4rem;
+        padding: 0.65rem 1rem;
+        font-size: 0.9rem;
+    }
+    .trust-stats-bar {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.4rem;
+        margin-top: 1.5rem;
+    }
+    .trust-stat-pill {
+        font-size: 0.76rem;
+        padding: 0.35rem 0.8rem;
     }
     .categories-horizontal-scroll {
         display: flex;
@@ -269,6 +303,22 @@
     }
     .category-item {
         flex-shrink: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-main-heading {
+        font-size: 1.65rem !important;
+    }
+    .hero-cursive-accent {
+        font-size: 1.95rem !important;
+    }
+    .hero-badge-pill {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.75rem;
+    }
+    .hero-sub-text {
+        font-size: 0.85rem !important;
     }
 }
 
@@ -380,11 +430,11 @@
 <div class="full-hero">
     <div class="hero-content-wrapper">
         <div class="hero-badge-pill">
-            <i class="fa-solid fa-compass text-danger"></i>
-            <span class="font-cursive fs-5 me-1">where magic meets comfort</span> • Handpicked Haven Stays
+            <i class="fa-solid fa-compass text-danger me-1"></i>
+            <span class="font-cursive fs-5 me-1 d-none d-sm-inline">where magic meets comfort • </span>Handpicked Haven Stays
         </div>
         <h1 class="hero-main-heading">
-            Find Your Haven, <br>
+            Find Your Haven, <br class="d-none d-sm-inline">
             <span class="hero-cursive-accent">Feel Entirely at Home.</span>
         </h1>
         <p class="hero-sub-text font-serif-italic">
