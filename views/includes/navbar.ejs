@@ -223,6 +223,34 @@
     font-size: 0.75rem;
     font-weight: 800;
 }
+
+@media (max-width: 991px) {
+    .main-navbar {
+        padding: 0.75rem 1rem;
+    }
+    .nav-search-wrapper {
+        max-width: 100%;
+        margin: 0.75rem 0;
+    }
+    .navbar-collapse {
+        background: #ffffff;
+        border-radius: 1.25rem;
+        padding: 1.25rem;
+        margin-top: 0.75rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e2e8f0;
+    }
+    .d-flex.align-items-center.gap-2.ms-lg-auto {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 0.6rem !important;
+    }
+    .btn-signup-pill, .btn-login-pill, .nav-host-btn, .user-badge-pill {
+        text-align: center;
+        justify-content: center;
+        width: 100%;
+    }
+}
 </style>
 
 <nav class="navbar navbar-expand-lg main-navbar sticky-top">
