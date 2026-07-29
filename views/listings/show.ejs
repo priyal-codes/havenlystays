@@ -1,78 +1,307 @@
 <% layout("layouts/boilerplate") -%>
-<body>
-    <div class="row mt-3">
-        <div class="col-8 offset-3">
-    <h3><%= listing.title %></h3>
-    </div>
-    <div class="card col-6 offset-3 show-card listing-card">
-        <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing_image">
-        <div class="card-body">
-            <p class="card-text"><i>Owned by <%= listing.owner.username %></i></p>
-            <p class="card-text"><%= listing.description %></p>
-            <p class="card-text">&#8377;<%= listing.price.toLocaleString("en-IN")%></p>
-            <p class="card-text"><%= listing.location %></p>
-            <p class="card-text"><%= listing.country %></p>
+
+<style>
+.show-page-container {
+    padding: 2rem 0 4rem 0;
+}
+
+.show-header-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.6px;
+    margin-bottom: 0.5rem;
+}
+
+.show-meta-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.show-meta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #334155;
+    background: #f1f5f9;
+    padding: 0.35rem 0.9rem;
+    border-radius: 20px;
+}
+
+.show-host-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.show-host-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #fe424d;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.85rem;
+}
+
+.show-hero-img-wrapper {
+    position: relative;
+    border-radius: 1.6rem;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(15, 23, 42, 0.1);
+    margin-bottom: 1.5rem;
+    background: #0f172a;
+    width: 100%;
+    height: 380px;
+}
+
+.show-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.show-badge-overlay {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(10px);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.88rem;
+    padding: 0.45rem 1.1rem;
+    border-radius: 2rem;
+    z-index: 10;
+}
+
+.show-details-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.6rem;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+}
+
+.booking-floating-card {
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 1.8rem;
+    padding: 2rem;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+    position: sticky;
+    top: 6rem;
+}
+
+.booking-price-header {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.amenity-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: #334155;
+}
+
+.review-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 1.25rem;
+    background: #ffffff;
+    transition: all 0.25s ease;
+}
+
+.review-card:hover {
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    transform: translateY(-2px);
+}
+</style>
+
+<div class="show-page-container">
+    <!-- Header Section -->
+    <div class="mb-4">
+        <h1 class="show-header-title"><%= listing.title %></h1>
+        <div class="show-meta-bar">
+            <span class="show-meta-pill">
+                <i class="fa-solid fa-location-dot text-danger"></i> <%= listing.location %>, <%= listing.country %>
+            </span>
+            <span class="show-meta-pill">
+                <i class="fa-solid fa-star text-warning"></i> 4.9 (12 reviews)
+            </span>
+            <span class="show-meta-pill">
+                <i class="fa-solid fa-layer-group text-primary"></i> <%= listing.category || 'Trending' %>
+            </span>
+            <div class="show-host-badge ms-auto">
+                <div class="show-host-avatar"><%= listing.owner && listing.owner.username ? listing.owner.username.charAt(0).toUpperCase() : 'H' %></div>
+                <span>Hosted by <span class="text-danger"><%= listing.owner ? listing.owner.username : 'Host' %></span></span>
+            </div>
         </div>
     </div>
-    <br>
-<% if(currUser && listing.owner._id.equals(currUser._id)) { %>
-    <div class="btns">
-        <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-3 edit-btn">Edit</a>
-        <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
-            <button class="btn btn-dark offset-2">Delete</button>
-        </form>
-    </div>
-<% } %>    
 
-    
-    <div class="col-8 offset-3 mt-3">
-        <% if(currUser) { %>
-            <hr>
-        <h4>Leave a Review</h4>
-        <form action="/listings/<%= listing.id %>/reviews" method="POST" novalidate class="needs-validation">
-            <div class="mb-3 mt-3">
-            <label for="rating" class="form-label">Rating</label>
-            <fieldset class="starability-slot">
-                
-                <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
-                <input type="radio" id="first-rate1" name="review[rating]" value="1" />
-                <label for="first-rate1" title="Terrible">1 star</label>
-                <input type="radio" id="first-rate2" name="review[rating]" value="2" />
-                <label for="first-rate2" title="Not good">2 stars</label>
-                <input type="radio" id="first-rate3" name="review[rating]" value="3" />
-                <label for="first-rate3" title="Average">3 stars</label>
-                <input type="radio" id="first-rate4" name="review[rating]" value="4" />
-                <label for="first-rate4" title="Very good">4 stars</label>
-                <input type="radio" id="first-rate5" name="review[rating]" value="5" />
-                <label for="first-rate5" title="Amazing">5 stars</label>
-            </fieldset>
+    <!-- Main Content 2-Column Grid -->
+    <div class="row g-4 mb-5">
+        <!-- Left Details & Image Column -->
+        <div class="col-lg-7">
+            <!-- Hero Image Showcase inside Left Column -->
+            <div class="show-hero-img-wrapper">
+                <span class="show-badge-overlay">
+                    <i class="fa-solid fa-location-dot text-danger me-1"></i> <%= listing.location %>
+                </span>
+                <img src="<%= listing.image.url %>" class="show-hero-img" alt="<%= listing.title %>">
             </div>
-            <div class="mb-3 mt-3">
-                <label for="comment" class="form-label">Comment</label>
-                <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control" required></textarea>
-                <div class="invalid-feedback">Please add some comments for review</div>
+
+            <div class="show-details-card mb-4">
+                <h4 class="fw-bold text-dark mb-3">About this Haven</h4>
+                <p class="text-secondary fs-6 lh-lg mb-4"><%= listing.description %></p>
+
+                <hr class="my-4 text-secondary opacity-25">
+
+                <h5 class="fw-bold text-dark mb-3">What this stay offers</h5>
+                <div class="d-flex flex-wrap gap-2 mb-4">
+                    <span class="amenity-chip"><i class="fa-solid fa-wifi text-danger"></i> High-Speed WiFi</span>
+                    <span class="amenity-chip"><i class="fa-solid fa-water-ladder text-info"></i> Swimming Pool</span>
+                    <span class="amenity-chip"><i class="fa-solid fa-square-parking text-primary"></i> Free On-Site Parking</span>
+                    <span class="amenity-chip"><i class="fa-solid fa-snowflake text-primary"></i> Air Conditioning</span>
+                    <span class="amenity-chip"><i class="fa-solid fa-shield-heart text-danger"></i> 100% Superhost Guarantee</span>
+                </div>
+
+                <% if(currUser && listing.owner && listing.owner._id.equals(currUser._id)) { %>
+                    <hr class="my-4 text-secondary opacity-25">
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark rounded-pill px-4 fw-bold">
+                            <i class="fa-solid fa-pen-to-square me-1"></i> Edit Listing
+                        </a>
+                        <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="d-inline">
+                            <button class="btn btn-outline-danger rounded-pill px-4 fw-bold">
+                                <i class="fa-solid fa-trash me-1"></i> Delete Listing
+                            </button>
+                        </form>
+                    </div>
+                <% } %>
             </div>
-            <button class="btn btn-outline-dark mb-3">Submit</button>
-        </form>
-        <% } %>
-        <% if(listing.reviews.length > 0) { %>
+        </div>
+
+        <!-- Right Floating Booking Sidebar -->
+        <div class="col-lg-5">
+            <div class="booking-floating-card">
+                <div class="d-flex justify-content-between align-items-baseline mb-3">
+                    <span class="booking-price-header">&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %></span>
+                    <span class="text-secondary fw-semibold">/ night</span>
+                </div>
+                <div class="p-3 bg-light rounded-4 border mb-4">
+                    <div class="d-flex justify-content-between small text-secondary mb-1">
+                        <span>Base price</span>
+                        <span>&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : "0" %></span>
+                    </div>
+                    <div class="d-flex justify-content-between small text-danger fw-semibold">
+                        <span>GST Tax (18%)</span>
+                        <span>+&#8377;<%= listing.price ? Math.round(listing.price * 0.18).toLocaleString("en-IN") : "0" %></span>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-danger btn-lg w-100 rounded-pill fw-bold py-3 shadow mb-3">
+                    <i class="fa-solid fa-bolt me-2"></i> Reserve This Haven
+                </button>
+                <p class="text-center text-secondary small mb-0">You won't be charged yet</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="border-top pt-5">
         <div class="row">
-            <h4>All Reviews</h4>
-            <% for(review of listing.reviews) { %>
-                <div class="card col-5 ms-3 mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">@<%= review.author.username %></h5>
-                        <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
-                        <p class="card-text"><%= review.comment %></p>
-                       
-                        <form class="mb-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
-                            <button class="btn btn-sm btn-dark">Delete</button>
+            <!-- Review Form -->
+            <% if(currUser) { %>
+                <div class="col-lg-6 mb-4">
+                    <div class="show-details-card">
+                        <h4 class="fw-bold text-dark mb-3"><i class="fa-regular fa-comment-dots text-danger me-2"></i>Leave a Review</h4>
+                        <form action="/listings/<%= listing.id %>/reviews" method="POST" novalidate class="needs-validation">
+                            <div class="mb-3">
+                                <label for="rating" class="form-label fw-bold text-dark small">Select Rating</label>
+                                <fieldset class="starability-slot">
+                                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+                                    <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                                    <label for="first-rate1" title="Terrible">1 star</label>
+                                    <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                                    <label for="first-rate2" title="Not good">2 stars</label>
+                                    <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                                    <label for="first-rate3" title="Average">3 stars</label>
+                                    <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                                    <label for="first-rate4" title="Very good">4 stars</label>
+                                    <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                                    <label for="first-rate5" title="Amazing">5 stars</label>
+                                </fieldset>
+                            </div>
+                            <div class="mb-3">
+                                <label for="comment" class="form-label fw-bold text-dark small">Your Experience</label>
+                                <textarea name="review[comment]" id="comment" rows="4" placeholder="Share your experience staying at this haven..." class="form-control form-control-custom" required></textarea>
+                                <div class="invalid-feedback ms-1">Please write a comment for your review.</div>
+                            </div>
+                            <button class="btn btn-danger rounded-pill px-4 fw-bold">Submit Review</button>
                         </form>
                     </div>
                 </div>
             <% } %>
+
+            <!-- All Reviews List -->
+            <div class="<%= currUser ? 'col-lg-6' : 'col-12' %>">
+                <% if(listing.reviews && listing.reviews.length > 0) { %>
+                    <h4 class="fw-bold text-dark mb-4">Guest Reviews (<%= listing.reviews.length %>)</h4>
+                    <div class="row g-3">
+                        <% for(review of listing.reviews) { %>
+                            <div class="col-12">
+                                <div class="card review-card p-3">
+                                    <div class="card-body p-2">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="show-host-avatar bg-dark" style="width: 28px; height: 28px; font-size: 0.75rem;">
+                                                    <%= review.author && review.author.username ? review.author.username.charAt(0).toUpperCase() : 'U' %>
+                                                </div>
+                                                <h6 class="fw-bold text-dark mb-0">@<%= review.author ? review.author.username : 'Anonymous' %></h6>
+                                            </div>
+                                            <p class="starability-result mb-0" data-rating="<%= review.rating %>"></p>
+                                        </div>
+                                        <p class="card-text text-secondary small mb-2"><%= review.comment %></p>
+
+                                        <% if(currUser && review.author && review.author._id.equals(currUser._id)) { %>
+                                            <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" class="text-end mt-2">
+                                                <button class="btn btn-sm btn-link text-danger text-decoration-none p-0 fw-bold small">
+                                                    <i class="fa-solid fa-trash me-1"></i>Delete Review
+                                                </button>
+                                            </form>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                <% } else { %>
+                    <div class="text-center py-4 bg-light rounded-4 border">
+                        <i class="fa-regular fa-comments text-secondary display-5 mb-2"></i>
+                        <p class="text-secondary fw-semibold mb-0">No reviews yet. Be the first traveler to leave a review!</p>
+                    </div>
+                <% } %>
+            </div>
         </div>
-        <% } %>
     </div>
 </div>
-</body>
