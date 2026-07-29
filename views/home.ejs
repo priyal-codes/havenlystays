@@ -303,6 +303,61 @@
     }
     .category-item {
         flex-shrink: 0;
+        padding: 0.5rem 0.85rem;
+        border-radius: 1rem;
+        font-size: 0.76rem;
+    }
+    .category-item i {
+        font-size: 1.1rem;
+    }
+
+    /* Mobile 2x2 Grid & Section Sizing */
+    .section-headline {
+        font-size: 1.4rem !important;
+    }
+    .cursive-tagline {
+        font-size: 1.25rem !important;
+    }
+    .stay-card-img-wrapper {
+        height: 105px !important;
+    }
+    .stay-badge-location {
+        font-size: 0.58rem !important;
+        padding: 0.15rem 0.45rem !important;
+        top: 0.35rem !important;
+        left: 0.35rem !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 82% !important;
+    }
+    .stay-card .card-body {
+        padding: 0.6rem !important;
+    }
+    .stay-card h5 {
+        font-size: 0.8rem !important;
+        max-width: 68% !important;
+    }
+    .stay-card .badge {
+        font-size: 0.62rem !important;
+        padding: 0.15rem 0.35rem !important;
+    }
+    .stay-card p.text-secondary {
+        display: none !important;
+    }
+    .stay-card-price {
+        font-size: 0.82rem !important;
+        white-space: nowrap !important;
+    }
+    .stay-card-price span {
+        font-size: 0.6rem !important;
+        white-space: nowrap !important;
+    }
+    .stay-card .btn-danger {
+        font-size: 0.62rem !important;
+        padding: 0.2rem 0.5rem !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
     }
 }
 
@@ -527,17 +582,17 @@
 
     <!-- Featured Haven Stays -->
     <div class="my-5">
-        <div class="d-flex justify-content-between align-items-end mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3 mb-md-4">
             <div>
                 <span class="cursive-tagline">handpicked sanctuaries</span>
                 <h2 class="section-headline mb-0">Featured Haven Stays</h2>
             </div>
-            <a href="/listings" class="btn btn-outline-danger rounded-pill px-4 fw-bold">
-                Explore All Stays <i class="fa-solid fa-arrow-right ms-1"></i>
+            <a href="/listings" class="btn btn-outline-danger rounded-pill px-3 py-1 fw-bold small">
+                Explore All <i class="fa-solid fa-arrow-right ms-1"></i>
             </a>
         </div>
 
-        <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 g-4">
+        <div class="row row-cols-lg-3 row-cols-md-2 row-cols-2 g-2 g-md-4">
             <% if(featuredListings && featuredListings.length > 0) { %>
                 <% for(let listing of featuredListings) { %>
                     <div class="col">
