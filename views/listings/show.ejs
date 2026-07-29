@@ -217,6 +217,30 @@
         padding: 0.45rem 0.75rem !important;
         white-space: nowrap !important;
     }
+    .show-details-card .btn-danger:not(.booking-floating-card .btn-danger) {
+        font-size: 0.85rem !important;
+        padding: 0.55rem 1.25rem !important;
+        border-radius: 0.85rem !important;
+        width: 100% !important;
+        text-align: center !important;
+        box-shadow: 0 4px 14px rgba(254, 66, 77, 0.25) !important;
+    }
+    .starability-slot {
+        min-height: 32px !important;
+        height: 32px !important;
+        margin-bottom: 0.5rem !important;
+    }
+    .show-details-card textarea.form-control-custom {
+        padding: 0.55rem 0.85rem !important;
+        font-size: 0.88rem !important;
+        border-radius: 0.85rem !important;
+    }
+}
+
+.starability-slot {
+    min-height: 32px !important;
+    height: 32px !important;
+    margin-bottom: 0.5rem !important;
 }
 </style>
 
@@ -337,7 +361,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="comment" class="form-label fw-bold text-dark small">Your Experience</label>
-                                <textarea name="review[comment]" id="comment" rows="4" placeholder="Share your experience staying at this haven..." class="form-control form-control-custom" required></textarea>
+                                <textarea name="review[comment]" id="comment" rows="3" placeholder="Share your experience staying at this haven..." class="form-control form-control-custom" required></textarea>
                                 <div class="invalid-feedback ms-1">Please write a comment for your review.</div>
                             </div>
                             <button class="btn btn-danger rounded-pill px-4 fw-bold">Submit Review</button>

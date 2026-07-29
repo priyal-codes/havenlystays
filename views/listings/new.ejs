@@ -47,20 +47,15 @@
         padding: 0.85rem 0.75rem !important;
         border-radius: 0.85rem !important;
     }
-    .btn-form-submit {
-        font-size: 0.9rem !important;
-        padding: 0.65rem 1.5rem !important;
-        border-radius: 0.85rem !important;
-        width: 100% !important;
-        text-align: center !important;
-    }
-    .btn-form-cancel {
-        font-size: 0.88rem !important;
-        padding: 0.6rem 1.25rem !important;
-        border-radius: 0.85rem !important;
-        text-align: center !important;
-        width: 100% !important;
-        display: block !important;
+    .btn-form-submit, .btn-form-cancel {
+        font-size: 0.82rem !important;
+        padding: 0.5rem 0.85rem !important;
+        border-radius: 0.75rem !important;
+        white-space: nowrap !important;
+        width: auto !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
     .form-select.form-control-custom option {
         font-size: 0.82rem !important;
@@ -334,9 +329,9 @@
             </div>
 
             <!-- Buttons -->
-            <div class="d-flex align-items-center gap-3 pt-3 border-top">
+            <div class="d-flex align-items-center gap-2 pt-3 border-top">
                 <button type="submit" class="btn btn-form-submit">
-                    <i class="fa-solid fa-plus me-2"></i>Publish Listing
+                    <i class="fa-solid fa-plus me-1"></i>Publish Listing
                 </button>
                 <a href="/listings" class="btn-form-cancel">Cancel</a>
             </div>

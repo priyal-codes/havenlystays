@@ -47,20 +47,15 @@
         padding: 0.85rem 0.75rem !important;
         border-radius: 0.85rem !important;
     }
-    .btn-form-submit {
-        font-size: 0.9rem !important;
-        padding: 0.65rem 1.5rem !important;
-        border-radius: 0.85rem !important;
-        width: 100% !important;
-        text-align: center !important;
-    }
-    .btn-form-cancel {
-        font-size: 0.88rem !important;
-        padding: 0.6rem 1.25rem !important;
-        border-radius: 0.85rem !important;
-        text-align: center !important;
-        width: 100% !important;
-        display: block !important;
+    .btn-form-submit, .btn-form-cancel {
+        font-size: 0.82rem !important;
+        padding: 0.5rem 0.85rem !important;
+        border-radius: 0.75rem !important;
+        white-space: nowrap !important;
+        width: auto !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
     .form-select.form-control-custom option {
         font-size: 0.82rem !important;
@@ -277,16 +272,21 @@
                         <input type="hidden" name="listing[category]" id="categoryInput" value="<%= listing.category || 'Trending' %>">
                         <button type="button" id="categoryDropdownBtn" class="form-control form-control-custom d-flex align-items-center justify-content-between text-start cursor-pointer">
                             <span id="selectedCategoryLabel">
-                                <% if(listing.category === 'Rooms') { %>🛏️ Rooms<% } %>
-                                <% else if(listing.category === 'Iconic cities') { %>🏙️ Iconic Cities<% } %>
-                                <% else if(listing.category === 'Mountains') { %>🏔️ Mountains<% } %>
-                                <% else if(listing.category === 'Castles') { %>🏰 Castles<% } %>
-                                <% else if(listing.category === 'Pools') { %>🏊‍♂️ Amazing Pools<% } %>
-                                <% else if(listing.category === 'Camping') { %>⛺ Camping<% } %>
-                                <% else if(listing.category === 'Farms') { %>🚜 Farms<% } %>
-                                <% else if(listing.category === 'Arctic') { %>❄️ Arctic<% } %>
-                                <% else if(listing.category === 'Beachfront') { %>🏖️ Beachfront<% } %>
-                                <% else { %>🔥 Trending<% } %>
+                                <% 
+                                    const catIcons = {
+                                        'Trending': '🔥 Trending',
+                                        'Rooms': '🛏️ Rooms',
+                                        'Iconic cities': '🏙️ Iconic Cities',
+                                        'Mountains': '🏔️ Mountains',
+                                        'Castles': '🏰 Castles',
+                                        'Pools': '🏊‍♂️ Amazing Pools',
+                                        'Camping': '⛺ Camping',
+                                        'Farms': '🚜 Farms',
+                                        'Arctic': '❄️ Arctic',
+                                        'Beachfront': '🏖️ Beachfront'
+                                    };
+                                %>
+                                <%= catIcons[listing.category] || '🔥 Trending' %>
                             </span>
                             <i class="fa-solid fa-chevron-down text-secondary fs-6 transition-icon"></i>
                         </button>
@@ -355,9 +355,9 @@
             </div>
 
             <!-- Buttons -->
-            <div class="d-flex align-items-center gap-3 pt-3 border-top">
+            <div class="d-flex align-items-center gap-2 pt-3 border-top">
                 <button type="submit" class="btn btn-form-submit">
-                    <i class="fa-solid fa-floppy-disk me-2"></i>Save Changes
+                    <i class="fa-solid fa-floppy-disk me-1"></i>Save Changes
                 </button>
                 <a href="/listings/<%= listing._id %>" class="btn-form-cancel">Cancel</a>
             </div>
