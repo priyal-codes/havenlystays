@@ -51,12 +51,20 @@
         font-size: 0.9rem !important;
         padding: 0.65rem 1.5rem !important;
         border-radius: 0.85rem !important;
+        width: 100% !important;
+        text-align: center !important;
     }
     .btn-form-cancel {
         font-size: 0.88rem !important;
         padding: 0.6rem 1.25rem !important;
         border-radius: 0.85rem !important;
-        text-align: center;
+        text-align: center !important;
+        width: 100% !important;
+        display: block !important;
+    }
+    .form-select.form-control-custom option {
+        font-size: 0.82rem !important;
+        padding: 0.4rem 0.6rem !important;
     }
 }
 
@@ -171,6 +179,63 @@
     background: #f1f5f9;
     color: #0f172a;
 }
+/* Custom Styled Luxury Dropdown */
+.custom-category-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.custom-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 1.2rem;
+    box-shadow: 0 15px 35px rgba(15, 23, 42, 0.14);
+    z-index: 1050;
+    max-height: 240px;
+    overflow-y: auto;
+    padding: 0.4rem;
+}
+
+.custom-dropdown-item {
+    padding: 0.6rem 0.85rem;
+    border-radius: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.custom-dropdown-item:hover, .custom-dropdown-item.active {
+    background: #fff1f2;
+    color: #fe424d;
+    font-weight: 700;
+}
+
+.transition-icon {
+    transition: transform 0.25s ease;
+}
+
+.transition-icon.rotate-180 {
+    transform: rotate(180deg);
+}
+
+@media (max-width: 767px) {
+    .custom-dropdown-menu {
+        border-radius: 1rem !important;
+        max-height: 200px !important;
+        padding: 0.3rem !important;
+    }
+    .custom-dropdown-item {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.84rem !important;
+        border-radius: 0.65rem !important;
+    }
+}
 </style>
 
 <div class="form-page-container">
@@ -208,18 +273,37 @@
                     <label for="category" class="form-label-custom">
                         <i class="fa-solid fa-layer-group text-danger"></i> Category
                     </label>
-                    <select name="listing[category]" id="category" class="form-select form-control-custom">
-                        <option value="Trending" <%= listing.category === 'Trending' ? 'selected' : '' %>>🔥 Trending</option>
-                        <option value="Rooms" <%= listing.category === 'Rooms' ? 'selected' : '' %>>🛏️ Rooms</option>
-                        <option value="Iconic cities" <%= listing.category === 'Iconic cities' ? 'selected' : '' %>>🏙️ Iconic Cities</option>
-                        <option value="Mountains" <%= listing.category === 'Mountains' ? 'selected' : '' %>>🏔️ Mountains</option>
-                        <option value="Castles" <%= listing.category === 'Castles' ? 'selected' : '' %>>🏰 Castles</option>
-                        <option value="Pools" <%= listing.category === 'Pools' ? 'selected' : '' %>>🏊‍♂️ Amazing Pools</option>
-                        <option value="Camping" <%= listing.category === 'Camping' ? 'selected' : '' %>>⛺ Camping</option>
-                        <option value="Farms" <%= listing.category === 'Farms' ? 'selected' : '' %>>🚜 Farms</option>
-                        <option value="Arctic" <%= listing.category === 'Arctic' ? 'selected' : '' %>>❄️ Arctic</option>
-                        <option value="Beachfront" <%= listing.category === 'Beachfront' ? 'selected' : '' %>>🏖️ Beachfront</option>
-                    </select>
+                    <div class="custom-category-dropdown position-relative">
+                        <input type="hidden" name="listing[category]" id="categoryInput" value="<%= listing.category || 'Trending' %>">
+                        <button type="button" id="categoryDropdownBtn" class="form-control form-control-custom d-flex align-items-center justify-content-between text-start cursor-pointer">
+                            <span id="selectedCategoryLabel">
+                                <% if(listing.category === 'Rooms') { %>🛏️ Rooms<% } %>
+                                <% else if(listing.category === 'Iconic cities') { %>🏙️ Iconic Cities<% } %>
+                                <% else if(listing.category === 'Mountains') { %>🏔️ Mountains<% } %>
+                                <% else if(listing.category === 'Castles') { %>🏰 Castles<% } %>
+                                <% else if(listing.category === 'Pools') { %>🏊‍♂️ Amazing Pools<% } %>
+                                <% else if(listing.category === 'Camping') { %>⛺ Camping<% } %>
+                                <% else if(listing.category === 'Farms') { %>🚜 Farms<% } %>
+                                <% else if(listing.category === 'Arctic') { %>❄️ Arctic<% } %>
+                                <% else if(listing.category === 'Beachfront') { %>🏖️ Beachfront<% } %>
+                                <% else { %>🔥 Trending<% } %>
+                            </span>
+                            <i class="fa-solid fa-chevron-down text-secondary fs-6 transition-icon"></i>
+                        </button>
+                        
+                        <div id="categoryDropdownMenu" class="custom-dropdown-menu d-none">
+                            <div class="custom-dropdown-item <%= (!listing.category || listing.category === 'Trending') ? 'active' : '' %>" data-value="Trending"><span>🔥 Trending</span></div>
+                            <div class="custom-dropdown-item <%= listing.category === 'Rooms' ? 'active' : '' %>" data-value="Rooms"><span>🛏️ Rooms</span></div>
+                            <div class="custom-dropdown-item <%= listing.category === 'Iconic cities' ? 'active' : '' %>" data-value="Iconic cities"><span>🏙️ Iconic Cities</span></div>
+                            <div class="custom-dropdown-item <%= listing.category === 'Mountains' ? 'active' : '' %>" data-value="Mountains"><span>🏔️ Mountains</span></div>
+                            <div class="custom-dropdown-item <%= listing.category === 'Castles' ? 'active' : '' %>" data-value="Castles"><span>🏰 Castles</span></div>
+                            <div class="custom-dropdown-item <%= listing.category === 'Pools' ? 'active' : '' %>" data-value="Pools"><span>🏊‍♂️ Amazing Pools</span></div>
+                            <div class="custom-dropdown-item <%= listing.category === 'Camping' ? 'active' : '' %>" data-value="Camping"><span>⛺ Camping</span></div>
+                            <div class="custom-dropdown-item <%= listing.category === 'Farms' ? 'active' : '' %>" data-value="Farms"><span>🚜 Farms</span></div>
+                            <div class="custom-dropdown-item <%= listing.category === 'Arctic' ? 'active' : '' %>" data-value="Arctic"><span>❄️ Arctic</span></div>
+                            <div class="custom-dropdown-item <%= listing.category === 'Beachfront' ? 'active' : '' %>" data-value="Beachfront"><span>🏖️ Beachfront</span></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="mb-3 col-md-6">
                     <label for="price" class="form-label-custom">
@@ -280,3 +364,43 @@
         </form>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const dropdownBtn = document.getElementById("categoryDropdownBtn");
+    const dropdownMenu = document.getElementById("categoryDropdownMenu");
+    const categoryInput = document.getElementById("categoryInput");
+    const labelSpan = document.getElementById("selectedCategoryLabel");
+
+    if (dropdownBtn && dropdownMenu) {
+        dropdownBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle("d-none");
+            const icon = dropdownBtn.querySelector(".transition-icon");
+            if (icon) icon.classList.toggle("rotate-180");
+        });
+
+        document.querySelectorAll(".custom-dropdown-item").forEach(item => {
+            item.addEventListener("click", () => {
+                const val = item.getAttribute("data-value");
+                if (categoryInput) categoryInput.value = val;
+                if (labelSpan) labelSpan.innerHTML = item.innerHTML;
+                dropdownMenu.classList.add("d-none");
+                
+                document.querySelectorAll(".custom-dropdown-item").forEach(i => i.classList.remove("active"));
+                item.classList.add("active");
+                const icon = dropdownBtn.querySelector(".transition-icon");
+                if (icon) icon.classList.remove("rotate-180");
+            });
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.classList.add("d-none");
+                const icon = dropdownBtn.querySelector(".transition-icon");
+                if (icon) icon.classList.remove("rotate-180");
+            }
+        });
+    }
+});
+</script>
