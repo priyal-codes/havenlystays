@@ -169,16 +169,19 @@
         display: none !important;
     }
     .stay-card-price {
-        font-size: 0.82rem !important;
+        font-size: 0.74rem !important;
         white-space: nowrap !important;
+        display: inline-flex !important;
+        align-items: baseline !important;
+        gap: 0.15rem !important;
     }
     .stay-card-price span {
-        font-size: 0.6rem !important;
+        font-size: 0.58rem !important;
         white-space: nowrap !important;
     }
     .stay-card .btn-danger {
-        font-size: 0.62rem !important;
-        padding: 0.2rem 0.5rem !important;
+        font-size: 0.58rem !important;
+        padding: 0.18rem 0.45rem !important;
         white-space: nowrap !important;
         flex-shrink: 0 !important;
     }
@@ -286,11 +289,7 @@
                             </div>
                             <p class="text-secondary small text-truncate mb-3"><%= listing.description || "Handpicked luxury stay experience curated for your perfect getaway." %></p>
                             <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                                <div>
-                                    <span class="stay-card-price">&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %></span>
-                                    <span class="text-secondary fw-normal small">/ night</span>
-                                    <i class="tax-info text-danger small fw-semibold" style="display: none;">&nbsp;(+18% GST)</i>
-                                </div>
+                                <span class="stay-card-price">&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> <span class="text-secondary fw-normal small">/ night</span><i class="tax-info text-danger small fw-semibold" style="display: none;">&nbsp;(+18% GST)</i></span>
                                 <span class="btn btn-sm btn-danger rounded-pill px-3 py-1 fw-bold">View Stay</span>
                             </div>
                         </div>
