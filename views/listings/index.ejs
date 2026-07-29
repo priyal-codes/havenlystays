@@ -61,12 +61,9 @@
 .search-status-bar {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
-    border-radius: 1rem;
-    padding: 0.75rem 1.25rem;
-    margin-bottom: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    border-radius: 1.2rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.25rem;
 }
 
 /* Premium Stay Card Styling matching Home Page */
@@ -257,25 +254,24 @@
 <!-- Active Search / Filter Status Banner -->
 <% if (search || category || selectedMonth || guests) { %>
     <div class="search-status-bar mt-3">
-        <div class="d-flex align-items-center flex-wrap gap-2">
-            <span class="text-secondary fw-semibold">Filtering results by:</span>
-            <% if (search) { %>
-                <span class="badge bg-danger fs-6 px-3 py-2 rounded-pill"><i class="fa-solid fa-location-dot me-1"></i> Destination: "<%= search %>"</span>
-            <% } %>
-            <% if (category) { %>
-                <span class="badge bg-primary fs-6 px-3 py-2 rounded-pill"><i class="fa-solid fa-layer-group me-1"></i> "<%= category %>"</span>
-            <% } %>
-            <% if (selectedMonth) { %>
-                <span class="badge bg-info text-dark fs-6 px-3 py-2 rounded-pill"><i class="fa-regular fa-calendar-check me-1"></i> Month: <%= selectedMonth %></span>
-            <% } %>
-            <% if (guests) { %>
-                <span class="badge bg-warning text-dark fs-6 px-3 py-2 rounded-pill"><i class="fa-solid fa-users me-1"></i> <%= guests %> Guests</span>
-            <% } %>
-            <span class="badge bg-dark fs-6 px-3 py-2 rounded-pill ms-auto"><%= allListings.length %> stays found</span>
-        </div>
-        <div class="mt-2 text-end">
-            <a href="/listings" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
-                <i class="fa-solid fa-xmark me-1"></i> Clear Filters
+        <div class="d-flex align-items-center justify-content-between gap-2">
+            <div class="d-flex align-items-center flex-wrap gap-1">
+                <% if (search) { %>
+                    <span class="badge bg-danger px-2.5 py-1.5 rounded-pill small"><i class="fa-solid fa-location-dot me-1"></i>"<%= search %>"</span>
+                <% } %>
+                <% if (category) { %>
+                    <span class="badge bg-primary px-2.5 py-1.5 rounded-pill small"><i class="fa-solid fa-layer-group me-1"></i>"<%= category %>"</span>
+                <% } %>
+                <% if (selectedMonth) { %>
+                    <span class="badge bg-info text-dark px-2.5 py-1.5 rounded-pill small"><i class="fa-regular fa-calendar-check me-1"></i><%= selectedMonth %></span>
+                <% } %>
+                <% if (guests) { %>
+                    <span class="badge bg-warning text-dark px-2.5 py-1.5 rounded-pill small"><i class="fa-solid fa-users me-1"></i><%= guests %> Guests</span>
+                <% } %>
+                <span class="badge bg-dark px-2.5 py-1.5 rounded-pill small"><%= allListings.length %> stays</span>
+            </div>
+            <a href="/listings" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 fw-bold text-nowrap flex-shrink-0">
+                <i class="fa-solid fa-xmark me-1"></i> Clear
             </a>
         </div>
     </div>
