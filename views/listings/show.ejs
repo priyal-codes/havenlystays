@@ -153,6 +153,10 @@
     .show-meta-pill {
         font-size: 0.72rem !important;
         padding: 0.25rem 0.6rem !important;
+        max-width: 100% !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
     .show-host-badge {
         font-size: 0.78rem !important;
@@ -208,6 +212,11 @@
         padding: 0.6rem 0.85rem !important;
         margin-bottom: 0.85rem !important;
     }
+    .show-details-card .btn-dark, .show-details-card .btn-outline-danger {
+        font-size: 0.82rem !important;
+        padding: 0.45rem 0.75rem !important;
+        white-space: nowrap !important;
+    }
 }
 </style>
 
@@ -216,14 +225,15 @@
     <div class="mb-4">
         <h1 class="show-header-title"><%= listing.title %></h1>
         <div class="show-meta-bar">
-            <span class="show-meta-pill">
-                <i class="fa-solid fa-location-dot text-danger"></i> <%= listing.location %>, <%= listing.country %>
+            <span class="show-meta-pill text-truncate" style="max-width: 100%;">
+                <i class="fa-solid fa-location-dot text-danger flex-shrink-0"></i> 
+                <span class="text-truncate"><%= listing.location %><% if(listing.country) { %>, <%= listing.country %><% } %></span>
             </span>
             <span class="show-meta-pill">
-                <i class="fa-solid fa-star text-warning"></i> 4.9 (12 reviews)
+                <i class="fa-solid fa-star text-warning me-1"></i>4.9 (12 reviews)
             </span>
             <span class="show-meta-pill">
-                <i class="fa-solid fa-layer-group text-primary"></i> <%= listing.category || 'Trending' %>
+                <i class="fa-solid fa-layer-group text-primary me-1"></i><%= listing.category || 'Trending' %>
             </span>
             <div class="show-host-badge ms-auto">
                 <div class="show-host-avatar"><%= listing.owner && listing.owner.username ? listing.owner.username.charAt(0).toUpperCase() : 'H' %></div>
@@ -261,12 +271,12 @@
 
                 <% if(currUser && listing.owner && listing.owner._id.equals(currUser._id)) { %>
                     <hr class="my-4 text-secondary opacity-25">
-                    <div class="d-flex align-items-center gap-3">
-                        <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark rounded-pill px-4 fw-bold">
+                    <div class="d-flex align-items-center gap-2">
+                        <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark rounded-pill px-3 py-2 fw-bold text-nowrap flex-fill text-center">
                             <i class="fa-solid fa-pen-to-square me-1"></i> Edit Listing
                         </a>
-                        <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="d-inline">
-                            <button class="btn btn-outline-danger rounded-pill px-4 fw-bold">
+                        <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="d-inline flex-fill">
+                            <button class="btn btn-outline-danger rounded-pill px-3 py-2 fw-bold text-nowrap w-100">
                                 <i class="fa-solid fa-trash me-1"></i> Delete Listing
                             </button>
                         </form>
