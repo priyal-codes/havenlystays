@@ -1,42 +1,230 @@
 <% layout("layouts/boilerplate") -%>
-<div class="row mt-3">
-    <div class="col-8 offset-2">
-<body>
-    <h3>Create a New Listing</h3>
-    <form action="/listings" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label for="title" class="form-label">Enter Title</label>
-            <input name="listing[title]" placeholder="Add a catchy title" type="text" class="form-control" required>
-            <div class="valid-feedback">Title looks good!</div>
+
+<style>
+.form-page-container {
+    padding: 2.5rem 1rem;
+    min-height: 80vh;
+}
+
+.form-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.8rem;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+    max-width: 740px;
+    margin: 0 auto;
+    padding: 3rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.form-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #fe424d 0%, #ff758c 100%);
+}
+
+.form-header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fff1f2;
+    color: #fe424d;
+    font-weight: 700;
+    font-size: 0.82rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 20px;
+    margin-bottom: 0.75rem;
+}
+
+.form-main-heading {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+}
+
+.form-label-custom {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.form-control-custom {
+    border: 1.5px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 0.75rem 1.1rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f172a;
+    background: #f8fafc;
+    transition: all 0.25s ease;
+}
+
+.form-control-custom:focus {
+    background: #ffffff;
+    border-color: #fe424d;
+    box-shadow: 0 0 0 4px rgba(254, 66, 77, 0.12);
+    outline: none;
+}
+
+.file-upload-box {
+    border: 2px dashed #cbd5e1;
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    text-align: center;
+    background: #f8fafc;
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+
+.file-upload-box:hover {
+    border-color: #fe424d;
+    background: #fff1f2;
+}
+
+.btn-form-submit {
+    background: linear-gradient(135deg, #fe424d 0%, #e0313c 100%);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    border-radius: 1rem;
+    padding: 0.9rem 2.2rem;
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(254, 66, 77, 0.35);
+}
+
+.btn-form-submit:hover {
+    background: linear-gradient(135deg, #e0313c 0%, #c82333 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(254, 66, 77, 0.5);
+    color: #ffffff;
+}
+
+.btn-form-cancel {
+    border: 1.5px solid #cbd5e1;
+    color: #64748b;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 1rem;
+    padding: 0.85rem 1.8rem;
+    background: transparent;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-form-cancel:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+</style>
+
+<div class="form-page-container">
+    <div class="form-card">
+        <div class="mb-4">
+            <span class="form-header-badge">
+                <i class="fa-solid fa-house-chimney-window"></i> Become a Host
+            </span>
+            <h2 class="form-main-heading">Create Your New Haven</h2>
+            <p class="text-secondary small mb-0">Share your property with travelers around the world and start earning.</p>
         </div>
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea name="listing[description]" type="text" class="form-control" required></textarea>
-            <div class="invalid-feedback">Please enter a short description</div>
-        </div>
-        <div class="mb-3">
-            <label for="image" class="form-label">Upload Listing Image</label>
-            <input name="listing[image]" type="file" class="form-control" required>
-        </div>
-        <div class="row">
-            <div class="mb-3 col-md-4">
-                <label for="price" class="form-label">Price</label>
-                <input name="listing[price]" placeholder="1200" class="form-control" required>
-                <div class="invalid-feedback">Price should be valid</div>
+
+        <form action="/listings" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
+            <!-- Title -->
+            <div class="mb-3">
+                <label for="title" class="form-label-custom">
+                    <i class="fa-solid fa-heading text-danger"></i> Title
+                </label>
+                <input name="listing[title]" id="title" placeholder="e.g. Luxury Beachfront Villa with Private Infinity Pool" type="text" class="form-control form-control-custom" required>
+                <div class="valid-feedback ms-1">Title looks catchy!</div>
+                <div class="invalid-feedback ms-1">Please provide a descriptive title.</div>
             </div>
-            <div class="mb-3 col-md-8">
-                <label for="country" class="form-label">Country</label>
-                <input name="listing[country]" placeholder="USA" type="text" class="form-control" required>
-                <div class="invalid-feedback">Country name should be valid</div>
+
+            <!-- Description -->
+            <div class="mb-3">
+                <label for="description" class="form-label-custom">
+                    <i class="fa-solid fa-align-left text-danger"></i> Description
+                </label>
+                <textarea name="listing[description]" id="description" rows="4" placeholder="Describe the ambiance, key amenities, scenic views, and unique experiences your stay offers..." class="form-control form-control-custom" required></textarea>
+                <div class="invalid-feedback ms-1">Please write a short description.</div>
             </div>
-        </div>
-        <div class="mb-3">
-            <label for="location" class="form-label">Location</label>
-            <input name="listing[location]" placeholder="California" type="text" class="form-control" required>
-            <div class="invalid-feedback">Location should be valid</div>
-        </div>
-        <button class="btn btn-dark add-btn mb-3">Add</button>
-    </form>
+
+            <!-- Category & Price -->
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="category" class="form-label-custom">
+                        <i class="fa-solid fa-layer-group text-danger"></i> Category
+                    </label>
+                    <select name="listing[category]" id="category" class="form-select form-control-custom">
+                        <option value="Trending" selected>🔥 Trending</option>
+                        <option value="Rooms">🛏️ Rooms</option>
+                        <option value="Iconic cities">🏙️ Iconic Cities</option>
+                        <option value="Mountains">🏔️ Mountains</option>
+                        <option value="Castles">🏰 Castles</option>
+                        <option value="Pools">🏊‍♂️ Amazing Pools</option>
+                        <option value="Camping">⛺ Camping</option>
+                        <option value="Farms">🚜 Farms</option>
+                        <option value="Arctic">❄️ Arctic</option>
+                        <option value="Beachfront">🏖️ Beachfront</option>
+                    </select>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="price" class="form-label-custom">
+                        <i class="fa-solid fa-indian-rupee-sign text-danger"></i> Price (per night)
+                    </label>
+                    <input name="listing[price]" id="price" placeholder="1200" type="number" min="1" class="form-control form-control-custom" required>
+                    <div class="invalid-feedback ms-1">Please enter a valid price amount.</div>
+                </div>
+            </div>
+
+            <!-- Country & Location -->
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="country" class="form-label-custom">
+                        <i class="fa-solid fa-globe text-danger"></i> Country
+                    </label>
+                    <input name="listing[country]" id="country" placeholder="e.g. India" type="text" class="form-control form-control-custom" required>
+                    <div class="invalid-feedback ms-1">Please specify the country.</div>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="location" class="form-label-custom">
+                        <i class="fa-solid fa-location-dot text-danger"></i> Location / City
+                    </label>
+                    <input name="listing[location]" id="location" placeholder="e.g. Goa" type="text" class="form-control form-control-custom" required>
+                    <div class="invalid-feedback ms-1">Please specify the city or location.</div>
+                </div>
+            </div>
+
+            <!-- Image Upload -->
+            <div class="mb-4">
+                <label for="image" class="form-label-custom">
+                    <i class="fa-solid fa-image text-danger"></i> Upload Listing Cover Image
+                </label>
+                <div class="file-upload-box">
+                    <i class="fa-solid fa-cloud-arrow-up text-danger display-6 mb-2"></i>
+                    <p class="fw-semibold text-dark mb-1">Click to select high-resolution property photo</p>
+                    <small class="text-secondary d-block mb-3">Supports JPG, PNG, WEBP files</small>
+                    <input name="listing[image]" id="image" type="file" class="form-control form-control-custom" required>
+                    <div class="invalid-feedback ms-1 mt-2">Please upload a cover image for your listing.</div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex align-items-center gap-3 pt-3 border-top">
+                <button type="submit" class="btn btn-form-submit">
+                    <i class="fa-solid fa-plus me-2"></i>Publish Listing
+                </button>
+                <a href="/listings" class="btn-form-cancel">Cancel</a>
+            </div>
+        </form>
     </div>
 </div>
-</body>
