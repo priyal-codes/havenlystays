@@ -1,22 +1,193 @@
 <% layout("/layouts/boilerplate") -%>
-<div class="row mt-3">
-    <h1 class="col-6 offset-3">Signup on Havenly Stays</h1>
-    <div class="col-6 offset-3">
-        <form action="/signup" method="POST" class="needs-validation" novalidate>
-            <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input name="username" id="username" type="text" class="form-control" required>
-                <div class="valid-feedback">Looks good!</div>
+
+<style>
+.auth-container {
+    min-height: 78vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.auth-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.8rem;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+    width: 100%;
+    max-width: 460px;
+    padding: 2.75rem 2.25rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #fe424d 0%, #ff758c 100%);
+}
+
+.auth-brand-icon {
+    font-size: 2.4rem;
+    color: #fe424d;
+    display: inline-block;
+    transition: transform 0.4s ease;
+}
+
+.auth-card:hover .auth-brand-icon {
+    transform: rotate(360deg);
+}
+
+.auth-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+}
+
+.auth-input-wrapper {
+    position: relative;
+    margin-bottom: 1.25rem;
+}
+
+.auth-input-icon {
+    position: absolute;
+    left: 1.1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 1rem;
+    transition: color 0.2s ease;
+}
+
+.auth-input {
+    border: 1.5px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 0.85rem 1.1rem 0.85rem 2.8rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f172a;
+    transition: all 0.25s ease;
+    background: #f8fafc;
+}
+
+.auth-input:focus {
+    background: #ffffff;
+    border-color: #fe424d;
+    box-shadow: 0 0 0 4px rgba(254, 66, 77, 0.12);
+    outline: none;
+}
+
+.auth-input-wrapper:focus-within .auth-input-icon {
+    color: #fe424d;
+}
+
+.btn-auth-submit {
+    background: linear-gradient(135deg, #fe424d 0%, #e0313c 100%);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    border-radius: 1rem;
+    padding: 0.9rem 1.5rem;
+    border: none;
+    width: 100%;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(254, 66, 77, 0.35);
+    margin-top: 0.5rem;
+}
+
+.btn-auth-submit:hover {
+    background: linear-gradient(135deg, #e0313c 0%, #c82333 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(254, 66, 77, 0.5);
+    color: #ffffff;
+}
+
+.pwd-toggle-btn {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 0.95rem;
+    padding: 0;
+}
+
+.pwd-toggle-btn:hover {
+    color: #0f172a;
+}
+</style>
+
+<div class="auth-container">
+    <div class="auth-card text-center">
+        <div class="mb-3">
+            <i class="fa-regular fa-compass auth-brand-icon mb-2"></i>
+            <div class="text-secondary small fw-bold text-uppercase letter-spacing-1">Havenly Stays</div>
+            <h2 class="auth-title mt-1">Create Your Account</h2>
+            <p class="text-secondary small mb-4">Join Havenly Stays to discover and book extraordinary places.</p>
+        </div>
+
+        <form action="/signup" method="POST" class="needs-validation text-start" novalidate>
+            <div class="auth-input-wrapper">
+                <i class="fa-regular fa-user auth-input-icon"></i>
+                <input name="username" id="username" type="text" class="form-control auth-input" placeholder="Choose a Username" required autocomplete="username">
+                <div class="invalid-feedback ms-1">Please choose a valid username.</div>
             </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input name="email" id="email" type="email" class="form-control" required>
+
+            <div class="auth-input-wrapper">
+                <i class="fa-regular fa-envelope auth-input-icon"></i>
+                <input name="email" id="email" type="email" class="form-control auth-input" placeholder="Email Address" required autocomplete="email">
+                <div class="invalid-feedback ms-1">Please provide a valid email address.</div>
             </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input name="password" id="password" type="password" class="form-control" required>
+
+            <div class="auth-input-wrapper">
+                <i class="fa-solid fa-lock auth-input-icon"></i>
+                <input name="password" id="password" type="password" class="form-control auth-input pe-5" placeholder="Create Password" required autocomplete="new-password">
+                <button type="button" class="pwd-toggle-btn" id="toggleSignupPwd" title="Toggle Password">
+                    <i class="fa-regular fa-eye" id="signupEyeIcon"></i>
+                </button>
+                <div class="invalid-feedback ms-1">Please enter a password.</div>
             </div>
-            <button class="btn btn-success">SignUp</button>
+
+            <button type="submit" class="btn btn-auth-submit mb-3">
+                <i class="fa-solid fa-user-plus me-2"></i>Sign Up
+            </button>
         </form>
+
+        <div class="border-top pt-3 mt-3">
+            <p class="small text-secondary mb-0">
+                Already have an account? 
+                <a href="/login" class="fw-bold text-danger text-decoration-none ms-1">Log in here</a>
+            </p>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-center gap-3 text-muted small mt-4 pt-2 border-top border-light">
+            <span><i class="fa-solid fa-shield-halved text-success me-1"></i> SSL Protected</span>
+            <span>•</span>
+            <span><i class="fa-solid fa-circle-check text-primary me-1"></i> Instant Access</span>
+        </div>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const toggleBtn = document.getElementById("toggleSignupPwd");
+    const pwdInput = document.getElementById("password");
+    const eyeIcon = document.getElementById("signupEyeIcon");
+
+    if (toggleBtn && pwdInput && eyeIcon) {
+        toggleBtn.addEventListener("click", () => {
+            const isPassword = pwdInput.type === "password";
+            pwdInput.type = isPassword ? "text" : "password";
+            eyeIcon.className = isPassword ? "fa-regular fa-eye-slash" : "fa-regular fa-eye";
+        });
+    }
+});
+</script>
