@@ -138,28 +138,75 @@
 }
 
 @media (max-width: 767px) {
+    .show-page-container {
+        padding: 1rem 0 3rem 0;
+    }
     .show-header-title {
-        font-size: 1.6rem;
-    }
-    .show-hero-img-wrapper {
-        height: 250px;
-        border-radius: 1.25rem;
-    }
-    .show-details-card, .booking-floating-card {
-        padding: 1.25rem;
-        border-radius: 1.25rem;
-    }
-    .booking-floating-card {
-        position: relative;
-        top: 0;
-        margin-top: 1rem;
+        font-size: 1.35rem !important;
+        line-height: 1.3;
+        margin-bottom: 0.4rem;
     }
     .show-meta-bar {
-        gap: 0.5rem;
+        gap: 0.35rem !important;
+        margin-bottom: 0.85rem !important;
+    }
+    .show-meta-pill {
+        font-size: 0.72rem !important;
+        padding: 0.25rem 0.6rem !important;
     }
     .show-host-badge {
+        font-size: 0.78rem !important;
         width: 100%;
-        margin-top: 0.5rem;
+        margin-top: 0.25rem;
+    }
+    .show-host-avatar {
+        width: 26px !important;
+        height: 26px !important;
+        font-size: 0.75rem !important;
+    }
+    .show-hero-img-wrapper {
+        height: 220px !important;
+        border-radius: 1.2rem !important;
+        margin-bottom: 1rem !important;
+    }
+    .show-badge-overlay {
+        display: none !important;
+    }
+    .show-details-card {
+        padding: 1rem !important;
+        border-radius: 1.2rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+    .booking-floating-card {
+        padding: 1rem !important;
+        border-radius: 1.2rem !important;
+        position: relative;
+        top: 0;
+        margin-top: 0 !important;
+    }
+    .booking-price-header {
+        font-size: 1.3rem !important;
+    }
+    .amenity-chip {
+        font-size: 0.72rem !important;
+        padding: 0.35rem 0.65rem !important;
+        border-radius: 10px !important;
+        gap: 0.35rem !important;
+    }
+    .amenity-chip i {
+        font-size: 0.85rem !important;
+    }
+    .show-details-card h4 {
+        font-size: 1.15rem !important;
+    }
+    .booking-floating-card .btn-danger {
+        padding: 0.55rem 1rem !important;
+        font-size: 0.9rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    .booking-floating-card .bg-light {
+        padding: 0.6rem 0.85rem !important;
+        margin-bottom: 0.85rem !important;
     }
 }
 </style>
@@ -186,7 +233,7 @@
     </div>
 
     <!-- Main Content 2-Column Grid -->
-    <div class="row g-4 mb-5">
+    <div class="row g-3 g-md-4 mb-3 mb-md-5">
         <!-- Left Details & Image Column -->
         <div class="col-lg-7">
             <!-- Hero Image Showcase inside Left Column -->
@@ -254,7 +301,7 @@
     </div>
 
     <!-- Reviews Section -->
-    <div class="border-top pt-5">
+    <div class="border-top pt-3 pt-md-5">
         <div class="row">
             <!-- Review Form -->
             <% if(currUser) { %>
