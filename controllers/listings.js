@@ -1,34 +1,64 @@
 const Listing = require("../models/listing.js");
 
 module.exports.index = async(req, res) => {
-    const { search, category } = req.query;
-    let query = {};
+    const { search, category, month, guests } = req.query;
+    let queryConditions = [];
 
     if (category && category.trim() !== "") {
         const catRegex = new RegExp(category.trim(), "i");
-        query.$or = [
-            { category: catRegex },
-            { title: catRegex },
-            { description: catRegex },
-            { location: catRegex },
-            { country: catRegex }
-        ];
-    } else if (search && search.trim() !== "") {
-        const searchRegex = new RegExp(search.trim(), "i");
-        query.$or = [
-            { title: searchRegex },
-            { location: searchRegex },
-            { country: searchRegex },
-            { description: searchRegex },
-            { category: searchRegex }
-        ];
+        queryConditions.push({
+            $or: [
+                { category: catRegex },
+                { title: catRegex },
+                { description: catRegex },
+                { location: catRegex },
+                { country: catRegex }
+            ]
+        });
     }
 
-    const allListings = await Listing.find(query);
+    if (search && search.trim() !== "") {
+        const searchRegex = new RegExp(search.trim(), "i");
+        queryConditions.push({
+            $or: [
+                { title: searchRegex },
+                { location: searchRegex },
+                { country: searchRegex },
+                { description: searchRegex },
+                { category: searchRegex }
+            ]
+        });
+    }
+
+    if (month && month.trim() !== "") {
+        const monthRegex = new RegExp(month.trim(), "i");
+        queryConditions.push({
+            $or: [
+                { bestMonth: monthRegex },
+                { title: monthRegex },
+                { description: monthRegex },
+                { location: monthRegex },
+                { country: monthRegex }
+            ]
+        });
+    }
+
+    let finalQuery = queryConditions.length > 0 ? { $and: queryConditions } : {};
+    let allListings = await Listing.find(finalQuery);
+
+    // Fallback: if month was chosen but no specific restriction matches, return destination stays so user gets results
+    if (month && month.trim() !== "" && allListings.length === 0) {
+        const fallbackConditions = queryConditions.filter(c => !c.$or.some(o => o.bestMonth));
+        const fallbackQuery = fallbackConditions.length > 0 ? { $and: fallbackConditions } : {};
+        allListings = await Listing.find(fallbackQuery);
+    }
+
     res.render("listings/index.ejs", { 
         allListings, 
         search: search ? search.trim() : "", 
-        category: category ? category.trim() : "" 
+        category: category ? category.trim() : "",
+        selectedMonth: month ? month.trim() : "",
+        guests: guests ? guests.trim() : ""
     });
 };
 

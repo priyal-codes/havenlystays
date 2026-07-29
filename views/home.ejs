@@ -120,6 +120,48 @@
     border-right: 1px solid #e2e8f0;
 }
 
+/* Month Stepper Component */
+.month-stepper-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.month-stepper-arrows {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
+    z-index: 10;
+}
+
+.month-stepper-btn {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: #64748b;
+    font-size: 0.7rem;
+    line-height: 0.7;
+    cursor: pointer;
+    transition: color 0.15s ease, transform 0.1s ease;
+}
+
+.month-stepper-btn:hover {
+    color: #fe424d;
+    transform: scale(1.25);
+}
+
+.month-stepper-btn:active {
+    transform: scale(0.95);
+}
+
 .btn-brand-search {
     background: linear-gradient(135deg, #fe424d 0%, #e0313c 100%);
     color: #ffffff;
@@ -308,12 +350,22 @@
                     <div id="heroSearchDropdown" class="search-suggestions-dropdown d-none text-start"></div>
                 </div>
                 <div class="col-md-3 search-field-divider ps-2">
-                    <div class="search-field-title"><i class="fa-regular fa-calendar-check text-primary me-1"></i> Dates</div>
-                    <input type="text" class="form-control search-field-input" placeholder="Add dates">
+                    <div class="search-field-title"><i class="fa-regular fa-calendar-check text-primary me-1"></i> Month</div>
+                    <div class="month-stepper-container">
+                        <input type="text" id="monthInput" name="month" class="form-control search-field-input pe-4 cursor-pointer" readonly placeholder="Add month" autocomplete="off">
+                        <div class="month-stepper-arrows">
+                            <button type="button" id="monthUpBtn" class="month-stepper-btn" title="Next month">
+                                <i class="fa-solid fa-caret-up"></i>
+                            </button>
+                            <button type="button" id="monthDownBtn" class="month-stepper-btn" title="Previous month">
+                                <i class="fa-solid fa-caret-down"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-3 ps-2">
                     <div class="search-field-title"><i class="fa-solid fa-users text-warning me-1"></i> Guests</div>
-                    <input type="text" class="form-control search-field-input" placeholder="Add guests">
+                    <input type="number" min="1" max="20" name="guests" class="form-control search-field-input" placeholder="Add guests">
                 </div>
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-brand-search">
@@ -551,6 +603,58 @@ document.addEventListener("DOMContentLoaded", () => {
         document.addEventListener("click", (e) => {
             if (!heroInput.contains(e.target) && !heroDropdown.contains(e.target)) {
                 heroDropdown.classList.add("d-none");
+            }
+        });
+    }
+
+    // Month Stepper Handler
+    const monthInput = document.getElementById("monthInput");
+    const monthUpBtn = document.getElementById("monthUpBtn");
+    const monthDownBtn = document.getElementById("monthDownBtn");
+
+    if (monthInput && monthUpBtn && monthDownBtn) {
+        const months = [
+            "January", "February", "March", "April", "May", "June", 
+            "July", "August", "September", "October", "November", "December"
+        ];
+        let currentIndex = -1;
+
+        function setMonthIndex(idx) {
+            if (idx < 0) {
+                currentIndex = months.length - 1;
+            } else if (idx >= months.length) {
+                currentIndex = 0;
+            } else {
+                currentIndex = idx;
+            }
+            monthInput.value = months[currentIndex];
+        }
+
+        monthUpBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (currentIndex === -1) {
+                setMonthIndex(new Date().getMonth());
+            } else {
+                setMonthIndex(currentIndex + 1);
+            }
+        });
+
+        monthDownBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (currentIndex === -1) {
+                setMonthIndex(new Date().getMonth());
+            } else {
+                setMonthIndex(currentIndex - 1);
+            }
+        });
+
+        monthInput.addEventListener("click", () => {
+            if (currentIndex === -1) {
+                setMonthIndex(new Date().getMonth());
+            } else {
+                setMonthIndex(currentIndex + 1);
             }
         });
     }

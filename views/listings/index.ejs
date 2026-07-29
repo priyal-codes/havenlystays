@@ -125,16 +125,29 @@
 </div>
 
 <!-- Active Search / Filter Status Banner -->
-<% if (search || category) { %>
+<% if (search || category || selectedMonth || guests) { %>
     <div class="search-status-bar mt-3">
-        <div>
-            <span class="text-secondary">Filtering results by:</span>
-            <span class="fw-bold text-dark ms-1">"<%= search || category %>"</span>
-            <span class="badge bg-danger ms-2"><%= allListings.length %> stays found</span>
+        <div class="d-flex align-items-center flex-wrap gap-2">
+            <span class="text-secondary fw-semibold">Filtering results by:</span>
+            <% if (search) { %>
+                <span class="badge bg-danger fs-6 px-3 py-2 rounded-pill"><i class="fa-solid fa-location-dot me-1"></i> Destination: "<%= search %>"</span>
+            <% } %>
+            <% if (category) { %>
+                <span class="badge bg-primary fs-6 px-3 py-2 rounded-pill"><i class="fa-solid fa-layer-group me-1"></i> "<%= category %>"</span>
+            <% } %>
+            <% if (selectedMonth) { %>
+                <span class="badge bg-info text-dark fs-6 px-3 py-2 rounded-pill"><i class="fa-regular fa-calendar-check me-1"></i> Month: <%= selectedMonth %></span>
+            <% } %>
+            <% if (guests) { %>
+                <span class="badge bg-warning text-dark fs-6 px-3 py-2 rounded-pill"><i class="fa-solid fa-users me-1"></i> <%= guests %> Guests</span>
+            <% } %>
+            <span class="badge bg-dark fs-6 px-3 py-2 rounded-pill ms-auto"><%= allListings.length %> stays found</span>
         </div>
-        <a href="/listings" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
-            <i class="fa-solid fa-xmark me-1"></i> Clear Filters
-        </a>
+        <div class="mt-2 text-end">
+            <a href="/listings" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+                <i class="fa-solid fa-xmark me-1"></i> Clear Filters
+            </a>
+        </div>
     </div>
 <% } %>
 
