@@ -301,7 +301,7 @@
                     <div class="stay-card">
                         <div class="stay-card-img-wrapper">
                             <% if (currUser) { %>
-                                <% let isSaved = currUser.wishlist && currUser.wishlist.some(w => w._id ? w._id.toString() === listing._id.toString() : w.toString() === listing._id.toString()); %>
+                                <% let isSaved = currUser.wishlist && Array.isArray(currUser.wishlist) && currUser.wishlist.some(w => w && (w._id ? w._id.toString() === listing._id.toString() : w.toString() === listing._id.toString())); %>
                                 <button type="button" class="heart-btn-floating" onclick="toggleWishlist('<%= listing._id %>', event, this)" title="<%= isSaved ? 'Remove from wishlist' : 'Save to wishlist' %>">
                                     <i class="<%= isSaved ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart' %>"></i>
                                 </button>
