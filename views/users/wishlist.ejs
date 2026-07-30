@@ -1,0 +1,195 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<style>
+.wishlist-hero-card {
+    background: linear-gradient(135deg, #ffffff 0%, #fff1f2 100%);
+    border: 1px solid #fecdd3;
+    border-radius: 1.5rem;
+    padding: 2.2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(254, 66, 77, 0.08);
+}
+
+.wishlist-card {
+    border: none;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    position: relative;
+    height: 100%;
+}
+
+.wishlist-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+}
+
+.wishlist-img-wrapper {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+}
+
+.wishlist-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.wishlist-card:hover .wishlist-img {
+    transform: scale(1.06);
+}
+
+.heart-btn-floating {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: #fe424d;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.heart-btn-floating:hover {
+    transform: scale(1.15);
+    background: #ffffff;
+}
+
+.wishlist-body {
+    padding: 1.25rem;
+}
+
+.empty-wishlist-card {
+    background: #ffffff;
+    border: 2px dashed #cbd5e1;
+    border-radius: 1.5rem;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.empty-wishlist-icon {
+    width: 80px;
+    height: 80px;
+    background: #fff1f2;
+    color: #fe424d;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    margin: 0 auto 1.5rem auto;
+}
+</style>
+
+<div class="py-4">
+    <!-- Hero Header -->
+    <div class="wishlist-hero-card">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div>
+                <h1 class="fw-extrabold text-dark mb-1" style="font-size: 2rem; font-weight: 800;">
+                    <i class="fa-solid fa-heart text-danger me-2"></i>My Saved Wishlist
+                </h1>
+                <p class="text-secondary mb-0 small">Keep track of your favorite luxury stays and dream vacations in one place.</p>
+            </div>
+            <div>
+                <span class="badge bg-danger text-white rounded-pill px-3 py-2 fs-6 fw-bold">
+                    <%= wishlist ? wishlist.length : 0 %> <%= (wishlist && wishlist.length === 1) ? 'Saved Stay' : 'Saved Stays' %>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wishlist Listings Grid -->
+    <% if (wishlist && wishlist.length > 0) { %>
+        <div class="row g-4">
+            <% for (let listing of wishlist) { %>
+                <div class="col-lg-4 col-md-6" id="wishlist-col-<%= listing._id %>">
+                    <div class="wishlist-card">
+                        <div class="wishlist-img-wrapper">
+                            <button type="button" class="heart-btn-floating" onclick="toggleWishlist('<%= listing._id %>', this)" title="Remove from wishlist">
+                                <i class="fa-solid fa-heart text-danger"></i>
+                            </button>
+                            <img src="<%= listing.image && listing.image.url ? listing.image.url : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=600' %>" class="wishlist-img" alt="<%= listing.title %>">
+                        </div>
+
+                        <div class="wishlist-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="fw-bold text-dark mb-0 text-truncate" style="max-width: 75%;"><%= listing.title %></h5>
+                                <span class="fw-bold text-dark small"><i class="fa-solid fa-star text-warning me-1"></i>4.9</span>
+                            </div>
+                            <p class="text-secondary small mb-3 text-truncate">
+                                <i class="fa-solid fa-location-dot text-danger me-1"></i><%= listing.location %>, <%= listing.country %>
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                <div>
+                                    <span class="fs-5 fw-extrabold text-dark" style="font-weight: 800;">&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : "0" %></span>
+                                    <span class="text-secondary small"> / night</span>
+                                </div>
+                                <a href="/listings/<%= listing._id %>" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold">
+                                    Book Now <i class="fa-solid fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } else { %>
+        <div class="empty-wishlist-card">
+            <div class="empty-wishlist-icon">
+                <i class="fa-regular fa-heart"></i>
+            </div>
+            <h3 class="fw-bold text-dark mb-2">Your wishlist is empty</h3>
+            <p class="text-secondary mb-4 small max-w-md mx-auto">Explore our curated collection of luxury stays and click the heart icon on any stay to save it for later.</p>
+            <a href="/listings" class="btn btn-danger btn-lg rounded-pill px-4 fw-bold shadow-sm">
+                <i class="fa-solid fa-compass me-2"></i>Explore Stays
+            </a>
+        </div>
+    <% } %>
+</div>
+
+<script>
+async function toggleWishlist(listingId, btnEl) {
+    try {
+        const response = await fetch(`/wishlist/${listingId}/toggle`, {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        });
+        const data = await response.json();
+        if (data.success) {
+            const col = document.getElementById(`wishlist-col-${listingId}`);
+            if (col) {
+                col.style.transition = "all 0.3s ease";
+                col.style.opacity = "0";
+                col.style.transform = "scale(0.9)";
+                setTimeout(() => {
+                    col.remove();
+                    // If no items remain, reload to show empty state
+                    const remaining = document.querySelectorAll('[id^="wishlist-col-"]');
+                    if (remaining.length === 0) {
+                        location.reload();
+                    }
+                }, 300);
+            }
+        }
+    } catch(err) {
+        console.error("Error toggling wishlist:", err);
+    }
+}
+</script>

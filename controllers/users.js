@@ -42,3 +42,44 @@ module.exports.logout = (req, res, next) => {
         res.redirect("/listings");
     })
 };
+
+module.exports.toggleWishlist = async (req, res) => {
+    const mongoose = require("mongoose");
+    let { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ success: false, message: "Invalid Listing ID" });
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user) {
+        return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    const index = user.wishlist.indexOf(id);
+    let isSaved = false;
+
+    if (index > -1) {
+        user.wishlist.splice(index, 1);
+        isSaved = false;
+    } else {
+        user.wishlist.push(id);
+        isSaved = true;
+    }
+
+    await user.save();
+
+    if (req.xhr || (req.headers.accept && req.headers.accept.indexOf('json') > -1)) {
+        return res.json({ success: true, saved: isSaved, message: isSaved ? "Saved to Wishlist" : "Removed from Wishlist" });
+    }
+
+    req.flash("success", isSaved ? "Saved to Wishlist!" : "Removed from Wishlist!");
+    res.redirect(req.get("referer") || "/listings");
+};
+
+module.exports.renderWishlist = async (req, res) => {
+    const user = await User.findById(req.user._id).populate({
+        path: "wishlist",
+        populate: { path: "owner" }
+    });
+    res.render("users/wishlist.ejs", { wishlist: user.wishlist });
+};

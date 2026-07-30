@@ -646,6 +646,16 @@
                         <a href="/listings/<%= listing._id %>" class="text-decoration-none">
                             <div class="stay-card">
                                 <div class="stay-card-img-wrapper">
+                                    <% if (currUser) { %>
+                                        <% let isSaved = currUser.wishlist && currUser.wishlist.some(w => w._id ? w._id.toString() === listing._id.toString() : w.toString() === listing._id.toString()); %>
+                                        <button type="button" class="heart-btn-floating" onclick="toggleWishlist('<%= listing._id %>', event, this)" title="<%= isSaved ? 'Remove from wishlist' : 'Save to wishlist' %>">
+                                            <i class="<%= isSaved ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart' %>"></i>
+                                        </button>
+                                    <% } else { %>
+                                        <a href="/login" class="heart-btn-floating" onclick="event.stopPropagation();" title="Log in to save to wishlist">
+                                            <i class="fa-regular fa-heart"></i>
+                                        </a>
+                                    <% } %>
                                     <img src="<%= listing.image.url %>" class="stay-card-img" alt="<%= listing.title %>">
                                     <span class="stay-badge-location">
                                         <i class="fa-solid fa-location-dot me-1 text-danger"></i><%= listing.location %>, <%= listing.country %>
@@ -861,4 +871,33 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+async function toggleWishlist(listingId, event, btnEl) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    try {
+        const response = await fetch(`/wishlist/${listingId}/toggle`, {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        });
+        const data = await response.json();
+        if (data.success) {
+            const icon = btnEl.querySelector("i");
+            if (data.saved) {
+                icon.className = "fa-solid fa-heart text-danger";
+                btnEl.title = "Remove from wishlist";
+            } else {
+                icon.className = "fa-regular fa-heart";
+                btnEl.title = "Save to wishlist";
+            }
+        }
+    } catch(err) {
+        console.error("Error toggling wishlist:", err);
+    }
+}
 </script>
