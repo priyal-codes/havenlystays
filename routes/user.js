@@ -22,6 +22,7 @@ router
 
 router.get("/logout", userController.logout);
 
+router.get("/profile", isLoggedIn, wrapAsync(userController.renderProfile));
 router.get("/wishlist", isLoggedIn, wrapAsync(userController.renderWishlist));
 router.post("/wishlist/:id/toggle", isLoggedIn, wrapAsync(userController.toggleWishlist));
 

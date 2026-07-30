@@ -83,3 +83,18 @@ module.exports.renderWishlist = async (req, res) => {
     });
     res.render("users/wishlist.ejs", { wishlist: user.wishlist });
 };
+
+module.exports.renderProfile = async (req, res) => {
+    const Listing = require("../models/listing");
+    const Booking = require("../models/booking");
+
+    const user = await User.findById(req.user._id).populate("wishlist");
+    const userListings = await Listing.find({ owner: req.user._id });
+    const userBookings = await Booking.find({ user: req.user._id }).populate("listing");
+
+    res.render("users/profile.ejs", {
+        user,
+        userListings,
+        userBookings
+    });
+};

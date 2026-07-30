@@ -298,10 +298,10 @@
                         <i class="fa-solid fa-suitcase-rolling text-danger me-1"></i>My Trips
                     </a>
                     <a class="nav-host-btn me-2" href="/listings/new">Become a Host</a>
-                    <div class="user-badge-pill me-2">
+                    <a href="/profile" class="user-badge-pill text-decoration-none me-2" title="View My Profile">
                         <div class="user-avatar-circle"><%= currUser.username ? currUser.username.charAt(0).toUpperCase() : 'U' %></div>
                         <span><%= currUser.username %></span>
-                    </div>
+                    </a>
                     <a class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-bold" href="/logout">Log out</a>
                 <% } %>
             </div>
