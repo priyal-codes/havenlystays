@@ -514,7 +514,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="col-lg-6 mb-4">
                     <div class="show-details-card">
                         <h4 class="fw-bold text-dark mb-3"><i class="fa-regular fa-comment-dots text-danger me-2"></i>Leave a Review</h4>
-                        <form action="/listings/<%= listing.id %>/reviews" method="POST" novalidate class="needs-validation">
+                        <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
                             <div class="mb-3">
                                 <label for="rating" class="form-label fw-bold text-dark small">Select Rating</label>
                                 <fieldset class="starability-slot">

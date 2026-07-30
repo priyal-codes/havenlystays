@@ -81,6 +81,9 @@ app.use((req, res, next) => {
     res.locals.currUser = req.user;
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    if (req.session) {
+        req.session.flash = {};
+    }
     next();
 });
 
