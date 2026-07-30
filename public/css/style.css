@@ -128,4 +128,25 @@ body{
     align-items: center;
 }
 
+/* Remove Bootstrap & Browser Green Checkmark Validation Icons & Green Borders */
+.was-validated .form-control:valid,
+.form-control.is-valid,
+.was-validated .form-select:valid,
+.form-select.is-valid,
+.was-validated input:valid,
+.was-validated select:valid,
+input.is-valid,
+select.is-valid {
+    background-image: none !important;
+    padding-right: 0.75rem !important;
+}
+
+.was-validated .form-control:valid:focus,
+.form-control.is-valid:focus,
+.was-validated .form-select:valid:focus,
+.form-select.is-valid:focus {
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
 
