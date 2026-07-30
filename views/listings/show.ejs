@@ -253,8 +253,19 @@
                 <i class="fa-solid fa-location-dot text-danger flex-shrink-0"></i> 
                 <span class="text-truncate"><%= listing.location %><% if(listing.country) { %>, <%= listing.country %><% } %></span>
             </span>
+            <%
+                let avgRating = "New";
+                let numReviews = (listing.reviews && listing.reviews.length) ? listing.reviews.length : 0;
+                if (numReviews > 0) {
+                    let sum = 0;
+                    for (let r of listing.reviews) {
+                        sum += (r.rating || 5);
+                    }
+                    avgRating = (sum / numReviews).toFixed(1);
+                }
+            %>
             <span class="show-meta-pill">
-                <i class="fa-solid fa-star text-warning me-1"></i>4.9 (12 reviews)
+                <i class="fa-solid fa-star text-warning me-1"></i><%= avgRating %><% if (numReviews > 0) { %> (<%= numReviews %> <%= numReviews === 1 ? 'review' : 'reviews' %>)<% } %>
             </span>
             <span class="show-meta-pill">
                 <i class="fa-solid fa-layer-group text-primary me-1"></i><%= listing.category || 'Trending' %>
