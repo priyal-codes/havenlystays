@@ -324,25 +324,134 @@
         <div class="col-lg-5">
             <div class="booking-floating-card">
                 <div class="d-flex justify-content-between align-items-baseline mb-3">
-                    <span class="booking-price-header">&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %></span>
-                    <span class="text-secondary fw-semibold">/ night</span>
-                </div>
-                <div class="p-3 bg-light rounded-4 border mb-4">
-                    <div class="d-flex justify-content-between small text-secondary mb-1">
-                        <span>Base price</span>
-                        <span>&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : "0" %></span>
+                    <div>
+                        <span class="booking-price-header">&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : "0" %></span>
+                        <span class="text-secondary fw-semibold">/ night</span>
                     </div>
-                    <div class="d-flex justify-content-between small text-danger fw-semibold">
-                        <span>GST Tax (18%)</span>
-                        <span>+&#8377;<%= listing.price ? Math.round(listing.price * 0.18).toLocaleString("en-IN") : "0" %></span>
-                    </div>
+                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2.5 py-1.5 rounded-pill fw-bold small">
+                        <i class="fa-solid fa-bolt me-1"></i> Instant Book
+                    </span>
                 </div>
-                <button type="button" class="btn btn-danger btn-lg w-100 rounded-pill fw-bold py-3 shadow mb-3">
-                    <i class="fa-solid fa-bolt me-2"></i> Reserve This Haven
-                </button>
-                <p class="text-center text-secondary small mb-0">You won't be charged yet</p>
+
+                <form action="/listings/<%= listing._id %>/bookings" method="POST" id="bookingForm" class="needs-validation">
+                    <!-- Date Range Selection -->
+                    <div class="p-3 bg-light rounded-4 border mb-3">
+                        <div class="row g-2 mb-2">
+                            <div class="col-6 border-end">
+                                <label for="checkInDate" class="form-label fw-bold text-dark extra-small mb-1 uppercase" style="font-size: 0.72rem; letter-spacing: 0.5px;">CHECK-IN</label>
+                                <input type="date" id="checkInDate" name="booking[checkIn]" class="form-control form-control-sm border-0 bg-transparent fw-bold text-dark px-0" required>
+                            </div>
+                            <div class="col-6">
+                                <label for="checkOutDate" class="form-label fw-bold text-dark extra-small mb-1 uppercase" style="font-size: 0.72rem; letter-spacing: 0.5px;">CHECK-OUT</label>
+                                <input type="date" id="checkOutDate" name="booking[checkOut]" class="form-control form-control-sm border-0 bg-transparent fw-bold text-dark px-0" required>
+                            </div>
+                        </div>
+                        <div class="border-top pt-2 mt-1">
+                            <label for="guestCount" class="form-label fw-bold text-dark extra-small mb-1 uppercase" style="font-size: 0.72rem; letter-spacing: 0.5px;">GUESTS</label>
+                            <select id="guestCount" name="booking[guests]" class="form-select form-select-sm border-0 bg-transparent fw-bold text-dark px-0 shadow-none">
+                                <option value="1" selected>1 Guest</option>
+                                <option value="2">2 Guests</option>
+                                <option value="3">3 Guests</option>
+                                <option value="4">4 Guests</option>
+                                <option value="5">5+ Guests</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Price Breakdown -->
+                    <div class="p-3 bg-light rounded-4 border mb-4">
+                        <div class="d-flex justify-content-between small text-secondary mb-1">
+                            <span id="pricePerNightLabel">&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : "0" %> x <span id="nightsVal">1</span> night</span>
+                            <span id="basePriceVal">&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : "0" %></span>
+                        </div>
+                        <div class="d-flex justify-content-between small text-danger fw-semibold mb-2">
+                            <span>GST Tax (18%)</span>
+                            <span id="gstVal">+&#8377;<%= listing.price ? Math.round(listing.price * 0.18).toLocaleString("en-IN") : "0" %></span>
+                        </div>
+                        <hr class="my-2 text-secondary opacity-25">
+                        <div class="d-flex justify-content-between text-dark fw-bold pt-1">
+                            <span>Total Due</span>
+                            <span id="totalPriceVal" class="fs-5 text-danger">&#8377;<%= listing.price ? Math.round(listing.price * 1.18).toLocaleString("en-IN") : "0" %></span>
+                        </div>
+                    </div>
+
+                    <% if (currUser && listing.owner && listing.owner._id.equals(currUser._id)) { %>
+                        <button type="button" class="btn btn-secondary btn-lg w-100 rounded-pill fw-bold py-3 mb-3" disabled>
+                            <i class="fa-solid fa-house-user me-2"></i> You Own This Stay
+                        </button>
+                    <% } else { %>
+                        <button type="submit" class="btn btn-danger btn-lg w-100 rounded-pill fw-bold py-3 shadow mb-3">
+                            <i class="fa-solid fa-bolt me-2"></i> Reserve This Haven
+                        </button>
+                    <% } %>
+                    <p class="text-center text-secondary small mb-0"><i class="fa-solid fa-shield-halved me-1 text-success"></i> Free cancellation before check-in</p>
+                </form>
             </div>
         </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const nightlyPrice = <%= listing.price || 0 %>;
+    const checkInInput = document.getElementById("checkInDate");
+    const checkOutInput = document.getElementById("checkOutDate");
+    const nightsVal = document.getElementById("nightsVal");
+    const basePriceVal = document.getElementById("basePriceVal");
+    const gstVal = document.getElementById("gstVal");
+    const totalPriceVal = document.getElementById("totalPriceVal");
+
+    // Set default check-in (tomorrow) and check-out (day after tomorrow)
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const dayAfter = new Date(tomorrow);
+    dayAfter.setDate(dayAfter.getDate() + 1);
+
+    const formatDateStr = (d) => d.toISOString().split("T")[0];
+
+    if (checkInInput && checkOutInput) {
+        checkInInput.min = formatDateStr(today);
+        checkInInput.value = formatDateStr(tomorrow);
+        
+        checkOutInput.min = formatDateStr(tomorrow);
+        checkOutInput.value = formatDateStr(dayAfter);
+
+        function updatePriceCalculation() {
+            const checkInDate = new Date(checkInInput.value);
+            const checkOutDate = new Date(checkOutInput.value);
+
+            if (checkInInput.value && checkOutInput.value && checkOutDate > checkInDate) {
+                const diffTime = checkOutDate.getTime() - checkInDate.getTime();
+                const totalNights = Math.max(1, Math.ceil(diffTime / (1000 * 3600 * 24)));
+                
+                const basePrice = nightlyPrice * totalNights;
+                const gstAmount = Math.round(basePrice * 0.18);
+                const totalPrice = basePrice + gstAmount;
+
+                nightsVal.innerText = totalNights;
+                basePriceVal.innerText = "₹" + basePrice.toLocaleString("en-IN");
+                gstVal.innerText = "+₹" + gstAmount.toLocaleString("en-IN");
+                totalPriceVal.innerText = "₹" + totalPrice.toLocaleString("en-IN");
+            }
+        }
+
+        checkInInput.addEventListener("change", () => {
+            const cin = new Date(checkInInput.value);
+            const minCout = new Date(cin);
+            minCout.setDate(minCout.getDate() + 1);
+            checkOutInput.min = formatDateStr(minCout);
+
+            if (new Date(checkOutInput.value) <= cin) {
+                checkOutInput.value = formatDateStr(minCout);
+            }
+            updatePriceCalculation();
+        });
+
+        checkOutInput.addEventListener("change", updatePriceCalculation);
+        updatePriceCalculation();
+    }
+});
+</script>
     </div>
 
     <!-- Reviews Section -->

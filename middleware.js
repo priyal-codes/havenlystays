@@ -1,7 +1,8 @@
 const Listing = require("./models/listing.js");
 const ExpressError = require("./utils/ExpressError.js");
-const { listingSchema, reviewSchema } = require("./schema.js");
+const { listingSchema, reviewSchema, bookingSchema } = require("./schema.js");
 const Review = require("./models/review.js");
+const Booking = require("./models/booking.js");
 const mongoose = require("mongoose");
 
 module.exports.isLoggedIn = (req, res, next) => {
@@ -58,6 +59,16 @@ module.exports.validateReview = (req, res, next) => {
     }
 };
 
+module.exports.validateBooking = (req, res, next) => {
+    let {error} = bookingSchema.validate(req.body);
+    if(error) {
+        let errMsg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(400, errMsg);
+    } else {
+        next();
+    }
+};
+
 module.exports.isReviewAuthor = async(req, res, next) => {
     const {id, reviewId} = req.params;
     if (!mongoose.Types.ObjectId.isValid(reviewId)) {
@@ -72,6 +83,27 @@ module.exports.isReviewAuthor = async(req, res, next) => {
     if(!review.author || !review.author.equals(res.locals.currUser._id)) {
         req.flash("error", "You are not the author of this review!");
         return res.redirect(`/listings/${id}`);
+    }
+    next();
+};
+
+module.exports.isBookingGuest = async(req, res, next) => {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        req.flash("error", "Booking does not exist!");
+        return res.redirect("/bookings");
+    }
+    let booking = await Booking.findById(id).populate("listing");
+    if(!booking) {
+        req.flash("error", "Booking does not exist!");
+        return res.redirect("/bookings");
+    }
+    const isGuest = booking.user && booking.user.equals(res.locals.currUser._id);
+    const isHost = booking.listing && booking.listing.owner && booking.listing.owner.equals(res.locals.currUser._id);
+    
+    if(!isGuest && !isHost) {
+        req.flash("error", "You do not have permission to manage this booking!");
+        return res.redirect("/bookings");
     }
     next();
 };
