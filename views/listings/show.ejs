@@ -510,7 +510,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const map = L.map('map', {
         zoomControl: true,
-        scrollWheelZoom: false
+        scrollWheelZoom: true,
+        touchZoom: true,
+        dragging: true,
+        doubleClickZoom: true,
+        boxZoom: true
     }).setView(defaultCoords, 13);
 
     // Modern CARTO Voyager Tile Layer
