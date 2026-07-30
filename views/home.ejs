@@ -652,9 +652,9 @@
                                             <i class="<%= isSaved ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart' %>"></i>
                                         </button>
                                     <% } else { %>
-                                        <a href="/login" class="heart-btn-floating" onclick="event.stopPropagation();" title="Log in to save to wishlist">
+                                        <button type="button" class="heart-btn-floating" onclick="handleGuestHeartClick(event)" title="Log in to save to wishlist">
                                             <i class="fa-regular fa-heart"></i>
-                                        </a>
+                                        </button>
                                     <% } %>
                                     <img src="<%= listing.image.url %>" class="stay-card-img" alt="<%= listing.title %>">
                                     <span class="stay-badge-location">
@@ -899,5 +899,13 @@ async function toggleWishlist(listingId, event, btnEl) {
     } catch(err) {
         console.error("Error toggling wishlist:", err);
     }
+}
+
+function handleGuestHeartClick(event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    window.location.href = "/login";
 }
 </script>

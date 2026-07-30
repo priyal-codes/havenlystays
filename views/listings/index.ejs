@@ -300,15 +300,15 @@
                 <a href="/listings/<%= listing._id %>" class="listing-link">
                     <div class="stay-card">
                         <div class="stay-card-img-wrapper">
-                            <% if (currUser) { %>
+                             <% if (currUser) { %>
                                 <% let isSaved = currUser.wishlist && Array.isArray(currUser.wishlist) && currUser.wishlist.some(w => w && (w._id ? w._id.toString() === listing._id.toString() : w.toString() === listing._id.toString())); %>
                                 <button type="button" class="heart-btn-floating" onclick="toggleWishlist('<%= listing._id %>', event, this)" title="<%= isSaved ? 'Remove from wishlist' : 'Save to wishlist' %>">
                                     <i class="<%= isSaved ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart' %>"></i>
                                 </button>
                             <% } else { %>
-                                <a href="/login" class="heart-btn-floating" onclick="event.stopPropagation();" title="Log in to save to wishlist">
+                                <button type="button" class="heart-btn-floating" onclick="handleGuestHeartClick(event)" title="Log in to save to wishlist">
                                     <i class="fa-regular fa-heart"></i>
-                                </a>
+                                </button>
                             <% } %>
                             <img src="<%= listing.image.url %>" class="stay-card-img" alt="<%= listing.title %>">
                             <span class="stay-badge-location">
@@ -383,5 +383,13 @@
         } catch(err) {
             console.error("Error toggling wishlist:", err);
         }
+    }
+
+    function handleGuestHeartClick(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        window.location.href = "/login";
     }
 </script>
