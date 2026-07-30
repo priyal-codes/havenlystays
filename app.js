@@ -49,7 +49,7 @@ const store = MongoStore.create({
     touchAfter: 24 * 3600,
 });
 
-store.on("error", () => {
+store.on("error", (err) => {
     console.log("ERROR in MONGO SESSION STORE", err);
 });
 
@@ -115,9 +115,12 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+    if (err.name === "CastError") {
+        req.flash("error", "Listing you requested does not exist!");
+        return res.redirect("/");
+    }
     let {statusCode=500, message="Something went wrong!"} = err;
     res.status(statusCode).render("error.ejs", {message});
-    // res.status(statusCode).send(message);
 });
 
 const port = process.env.PORT || 8080;

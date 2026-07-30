@@ -1,11 +1,16 @@
 const Listing = require("../models/listing.js");
+const mongoose = require("mongoose");
+
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
 
 module.exports.index = async(req, res) => {
     const { search, category, month, guests } = req.query;
     let queryConditions = [];
 
     if (category && category.trim() !== "") {
-        const catRegex = new RegExp(category.trim(), "i");
+        const catRegex = new RegExp(escapeRegex(category.trim()), "i");
         queryConditions.push({
             $or: [
                 { category: catRegex },
@@ -18,7 +23,7 @@ module.exports.index = async(req, res) => {
     }
 
     if (search && search.trim() !== "") {
-        const searchRegex = new RegExp(search.trim(), "i");
+        const searchRegex = new RegExp(escapeRegex(search.trim()), "i");
         queryConditions.push({
             $or: [
                 { title: searchRegex },
@@ -31,7 +36,7 @@ module.exports.index = async(req, res) => {
     }
 
     if (month && month.trim() !== "") {
-        const monthRegex = new RegExp(month.trim(), "i");
+        const monthRegex = new RegExp(escapeRegex(month.trim()), "i");
         queryConditions.push({
             $or: [
                 { bestMonth: monthRegex },
@@ -53,6 +58,12 @@ module.exports.index = async(req, res) => {
         allListings = await Listing.find(fallbackQuery);
     }
 
+    // If search term was entered and no listings match, redirect to Home Page immediately with flash notification
+    if (search && search.trim() !== "" && allListings.length === 0) {
+        req.flash("error", `Listing "${search.trim()}" you requested does not exist!`);
+        return res.redirect("/");
+    }
+
     res.render("listings/index.ejs", { 
         allListings, 
         search: search ? search.trim() : "", 
@@ -67,7 +78,7 @@ module.exports.searchSuggestions = async(req, res) => {
     if (!q || q.trim() === "") {
         return res.json([]);
     }
-    const searchRegex = new RegExp(q.trim(), "i");
+    const searchRegex = new RegExp(escapeRegex(q.trim()), "i");
     const suggestions = await Listing.find({
         $or: [
             { title: searchRegex },
@@ -86,6 +97,11 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.showListing = async(req, res) => {
     let {id} = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        req.flash("error", "Listing you requested does not exist!");
+        return res.redirect("/");
+    }
+
     const listing = await Listing.findById(id)
     .populate({
         path: "reviews",
@@ -94,42 +110,61 @@ module.exports.showListing = async(req, res) => {
         },
     })
     .populate("owner");
+
     if(!listing) {
         req.flash("error", "Listing you requested does not exist!");
-         return res.redirect("/listings");
+        return res.redirect("/");
     }
-    // console.log(listing);
+    
     res.render("listings/show.ejs", {listing});
 };
 
 module.exports.createListing = async(req, res, next) => {
-        let url = req.file.path;
-        let filename = req.file.filename;
-       
-        const newListing = new Listing(req.body.listing);
-        newListing.owner = req.user._id;
+    let url = req.file ? req.file.path : "";
+    let filename = req.file ? req.file.filename : "";
+   
+    const newListing = new Listing(req.body.listing);
+    newListing.owner = req.user._id;
+    if (url) {
         newListing.image = {url, filename};
-        await newListing.save();
-        req.flash("success", "New Listing Created!");
-        res.redirect("/listings");
+    }
+    await newListing.save();
+    req.flash("success", "New Listing Created!");
+    res.redirect("/listings");
 };
 
 module.exports.renderEditForm = async(req, res) => {
     let {id} = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        req.flash("error", "Listing you requested does not exist!");
+        return res.redirect("/");
+    }
+
     const listing = await Listing.findById(id);
     if(!listing) {
         req.flash("error", "Listing you requested does not exist!");
-         return res.redirect("/listings");
+        return res.redirect("/");
     }
     
-    let originalImageUrl = listing.image.url;
-    originalImageUrl = originalImageUrl.replace("/upload", "/upload/w_200");
+    let originalImageUrl = (listing.image && listing.image.url) ? listing.image.url : "";
+    if (originalImageUrl.includes("/upload")) {
+        originalImageUrl = originalImageUrl.replace("/upload", "/upload/w_200");
+    }
     res.render("listings/edit.ejs", {listing, originalImageUrl});
 }
 
 module.exports.updateListing = async(req, res) => {
     let { id } = req.params;
-    let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        req.flash("error", "Listing you requested does not exist!");
+        return res.redirect("/");
+    }
+
+    let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing }, { new: true });
+    if (!listing) {
+        req.flash("error", "Listing you requested does not exist!");
+        return res.redirect("/");
+    }
 
     if(typeof req.file !== "undefined") {
       let url = req.file.path;
@@ -144,8 +179,12 @@ module.exports.updateListing = async(req, res) => {
 
 module.exports.destroyListing = async(req, res) => {
     let {id} = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        req.flash("error", "Listing you requested does not exist!");
+        return res.redirect("/");
+    }
+
     let deletedListing = await Listing.findByIdAndDelete(id);
-    console.log(deletedListing);
     req.flash("success", "Listing Deleted!");
-    res.redirect("/listings");
+    res.redirect("/");
 };

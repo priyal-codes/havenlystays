@@ -1,7 +1,90 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="row">
-    <div class="alert alert-danger col-6 offset-3" role="alert">
-       <p class="alert-heading"><%= message %></p>
+<style>
+.error-page-wrapper {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+}
+
+.error-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.8rem;
+    padding: 3rem 2rem;
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.error-icon-badge {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #fff1f2;
+    color: #fe424d;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 24px rgba(254, 66, 77, 0.18);
+}
+
+.error-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.75rem;
+}
+
+.error-desc {
+    font-size: 0.95rem;
+    color: #64748b;
+    font-weight: 500;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.error-btn {
+    background: #fe424d;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.85rem 2rem;
+    border-radius: 50px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.25s ease;
+    text-decoration: none;
+    box-shadow: 0 8px 20px rgba(254, 66, 77, 0.25);
+}
+
+.error-btn:hover {
+    background: #e0313c;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(254, 66, 77, 0.35);
+}
+</style>
+
+<div class="error-page-wrapper">
+    <div class="error-card">
+        <div class="error-icon-badge">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <h2 class="error-title">Oops! Something went wrong</h2>
+        <p class="error-desc"><%= message %></p>
+        <a href="/listings" class="error-btn">
+            <i class="fa-solid fa-compass"></i> Explore Havenly Stays
+        </a>
     </div>
 </div>
