@@ -502,8 +502,77 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     updatePriceCalculation();
+
+    // Leaflet Map Integration with Nominatim Geocoding
+    const locationQuery = `<%= listing.location %>, <%= listing.country %>`;
+    const listingTitle = `<%- listing.title.replace(/'/g, "\\'") %>`;
+    const defaultCoords = [20.5937, 78.9629]; // Default India fallback
+
+    const map = L.map('map', {
+        zoomControl: true,
+        scrollWheelZoom: false
+    }).setView(defaultCoords, 13);
+
+    // Modern CARTO Voyager Tile Layer
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    }).addTo(map);
+
+    // Custom Red Pin Marker Icon
+    const customPinIcon = L.divIcon({
+        className: 'custom-map-pin-container',
+        html: `<div class="custom-map-pin"><i class="fa-solid fa-house"></i></div>`,
+        iconSize: [44, 44],
+        iconAnchor: [22, 50],
+        popupAnchor: [0, -45]
+    });
+
+    // Geocode Location via Nominatim API
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationQuery)}`)
+        .then(response => response.json())
+        .then(data => {
+            let lat, lon;
+            if (data && data.length > 0) {
+                lat = parseFloat(data[0].lat);
+                lon = parseFloat(data[0].lon);
+            } else {
+                lat = defaultCoords[0];
+                lon = defaultCoords[1];
+            }
+
+            map.setView([lat, lon], 13);
+
+            const marker = L.marker([lat, lon], { icon: customPinIcon }).addTo(map);
+
+            const popupContent = `
+                <div class="p-2 text-center" style="max-width: 220px;">
+                    <h6 class="fw-bold text-dark mb-1" style="font-size: 0.92rem;">${listingTitle}</h6>
+                    <p class="text-secondary extra-small mb-2" style="font-size: 0.78rem;">
+                        <i class="fa-solid fa-location-dot text-danger me-1"></i>${locationQuery}
+                    </p>
+                    <span class="badge bg-danger-subtle text-danger rounded-pill fw-bold" style="font-size: 0.7rem;">
+                        Exact location provided after booking
+                    </span>
+                </div>
+            `;
+
+            marker.bindPopup(popupContent).openPopup();
+        })
+        .catch(err => {
+            console.log("Geocoding fallback triggered:", err);
+            const marker = L.marker(defaultCoords, { icon: customPinIcon }).addTo(map);
+            marker.bindPopup(`<b>${listingTitle}</b><br>${locationQuery}`);
+        });
 });
 </script>
+    </div>
+
+    <!-- Where You'll Be (Interactive Map) -->
+    <div class="border-top pt-4 pt-md-5 my-4">
+        <h4 class="fw-bold text-dark mb-1"><i class="fa-solid fa-map-location-dot text-danger me-2"></i>Where you'll be</h4>
+        <p class="text-secondary small mb-3"><%= listing.location %>, <%= listing.country %></p>
+        <div id="map" class="rounded-4 shadow-sm border overflow-hidden" style="height: 380px; width: 100%; z-index: 1;"></div>
     </div>
 
     <!-- Reviews Section -->
