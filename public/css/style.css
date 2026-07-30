@@ -149,4 +149,64 @@ select.is-valid {
     box-shadow: none !important;
 }
 
+/* Luxury Modern Flatpickr Calendar Styling */
+.flatpickr-calendar {
+    border-radius: 1.25rem !important;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.18) !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 0.6rem !important;
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    background: #ffffff !important;
+}
+
+.flatpickr-day.selected, 
+.flatpickr-day.startRange, 
+.flatpickr-day.endRange, 
+.flatpickr-day.selected.inRange, 
+.flatpickr-day.startRange.inRange, 
+.flatpickr-day.endRange.inRange, 
+.flatpickr-day.selected:focus, 
+.flatpickr-day.startRange:focus, 
+.flatpickr-day.endRange:focus, 
+.flatpickr-day.selected:hover, 
+.flatpickr-day.startRange:hover, 
+.flatpickr-day.endRange:hover {
+    background: #fe424d !important;
+    border-color: #fe424d !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
+
+.flatpickr-day.inRange {
+    background: #fff1f2 !important;
+    border-color: #fff1f2 !important;
+    color: #fe424d !important;
+    box-shadow: -5px 0 0 #fff1f2, 5px 0 0 #fff1f2 !important;
+}
+
+.flatpickr-day:hover {
+    background: #ffe4e6 !important;
+    border-color: #ffe4e6 !important;
+    color: #0f172a !important;
+}
+
+.flatpickr-day.today {
+    border-color: #fe424d !important;
+    font-weight: 700 !important;
+}
+
+.flatpickr-months .flatpickr-month {
+    color: #0f172a !important;
+    font-weight: 800 !important;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+    font-weight: 800 !important;
+}
+
+span.flatpickr-weekday {
+    color: #64748b !important;
+    font-weight: 700 !important;
+}
+
 

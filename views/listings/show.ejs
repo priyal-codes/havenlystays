@@ -339,11 +339,11 @@
                         <div class="row g-2 mb-2">
                             <div class="col-6 border-end">
                                 <label for="checkInDate" class="form-label fw-bold text-dark extra-small mb-1 uppercase" style="font-size: 0.72rem; letter-spacing: 0.5px;">CHECK-IN</label>
-                                <input type="date" id="checkInDate" name="booking[checkIn]" class="form-control form-control-sm border-0 bg-transparent fw-bold text-dark px-0" required>
+                                <input type="text" id="checkInDate" name="booking[checkIn]" class="form-control form-control-sm border-0 bg-transparent fw-bold text-dark px-0 shadow-none cursor-pointer" placeholder="Select check-in" required readonly>
                             </div>
                             <div class="col-6">
                                 <label for="checkOutDate" class="form-label fw-bold text-dark extra-small mb-1 uppercase" style="font-size: 0.72rem; letter-spacing: 0.5px;">CHECK-OUT</label>
-                                <input type="date" id="checkOutDate" name="booking[checkOut]" class="form-control form-control-sm border-0 bg-transparent fw-bold text-dark px-0" required>
+                                <input type="text" id="checkOutDate" name="booking[checkOut]" class="form-control form-control-sm border-0 bg-transparent fw-bold text-dark px-0 shadow-none cursor-pointer" placeholder="Select check-out" required readonly>
                             </div>
                         </div>
                         <div class="border-top pt-2 mt-1">
@@ -392,14 +392,11 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const nightlyPrice = <%= listing.price || 0 %>;
-    const checkInInput = document.getElementById("checkInDate");
-    const checkOutInput = document.getElementById("checkOutDate");
     const nightsVal = document.getElementById("nightsVal");
     const basePriceVal = document.getElementById("basePriceVal");
     const gstVal = document.getElementById("gstVal");
     const totalPriceVal = document.getElementById("totalPriceVal");
 
-    // Set default check-in (tomorrow) and check-out (day after tomorrow)
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -407,23 +404,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const dayAfter = new Date(tomorrow);
     dayAfter.setDate(dayAfter.getDate() + 1);
 
-    const formatDateStr = (d) => d.toISOString().split("T")[0];
+    function updatePriceCalculation() {
+        if (checkInFP && checkOutFP && checkInFP.selectedDates[0] && checkOutFP.selectedDates[0]) {
+            const cin = checkInFP.selectedDates[0];
+            const cout = checkOutFP.selectedDates[0];
 
-    if (checkInInput && checkOutInput) {
-        checkInInput.min = formatDateStr(today);
-        checkInInput.value = formatDateStr(tomorrow);
-        
-        checkOutInput.min = formatDateStr(tomorrow);
-        checkOutInput.value = formatDateStr(dayAfter);
-
-        function updatePriceCalculation() {
-            const checkInDate = new Date(checkInInput.value);
-            const checkOutDate = new Date(checkOutInput.value);
-
-            if (checkInInput.value && checkOutInput.value && checkOutDate > checkInDate) {
-                const diffTime = checkOutDate.getTime() - checkInDate.getTime();
+            if (cout > cin) {
+                const diffTime = cout.getTime() - cin.getTime();
                 const totalNights = Math.max(1, Math.ceil(diffTime / (1000 * 3600 * 24)));
-                
+
                 const basePrice = nightlyPrice * totalNights;
                 const gstAmount = Math.round(basePrice * 0.18);
                 const totalPrice = basePrice + gstAmount;
@@ -434,22 +423,41 @@ document.addEventListener("DOMContentLoaded", () => {
                 totalPriceVal.innerText = "₹" + totalPrice.toLocaleString("en-IN");
             }
         }
-
-        checkInInput.addEventListener("change", () => {
-            const cin = new Date(checkInInput.value);
-            const minCout = new Date(cin);
-            minCout.setDate(minCout.getDate() + 1);
-            checkOutInput.min = formatDateStr(minCout);
-
-            if (new Date(checkOutInput.value) <= cin) {
-                checkOutInput.value = formatDateStr(minCout);
-            }
-            updatePriceCalculation();
-        });
-
-        checkOutInput.addEventListener("change", updatePriceCalculation);
-        updatePriceCalculation();
     }
+
+    const checkInFP = flatpickr("#checkInDate", {
+        minDate: "today",
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: "d-m-Y",
+        altInputClass: "form-control form-control-sm border-0 bg-transparent fw-bold text-dark px-0 shadow-none cursor-pointer",
+        defaultDate: tomorrow,
+        onChange: function(selectedDates) {
+            if (selectedDates[0]) {
+                const minCout = new Date(selectedDates[0]);
+                minCout.setDate(minCout.getDate() + 1);
+                checkOutFP.set("minDate", minCout);
+                if (!checkOutFP.selectedDates[0] || checkOutFP.selectedDates[0] <= selectedDates[0]) {
+                    checkOutFP.setDate(minCout);
+                }
+                updatePriceCalculation();
+            }
+        }
+    });
+
+    const checkOutFP = flatpickr("#checkOutDate", {
+        minDate: dayAfter,
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: "d-m-Y",
+        altInputClass: "form-control form-control-sm border-0 bg-transparent fw-bold text-dark px-0 shadow-none cursor-pointer",
+        defaultDate: dayAfter,
+        onChange: function() {
+            updatePriceCalculation();
+        }
+    });
+
+    updatePriceCalculation();
 });
 </script>
     </div>
