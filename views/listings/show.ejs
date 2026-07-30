@@ -506,15 +506,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // Leaflet Map Integration with Nominatim Geocoding
     const locationQuery = `<%= listing.location %>, <%= listing.country %>`;
     const listingTitle = `<%- listing.title.replace(/'/g, "\\'") %>`;
-    let stayCoords = defaultCoords;
+    const defaultCoords = [20.5937, 78.9629]; // Default India fallback
 
     const map = L.map('map', {
         zoomControl: true,
-        scrollWheelZoom: true,
+        scrollWheelZoom: false,
         touchZoom: true,
         dragging: true,
         doubleClickZoom: true,
-        tap: true
+        boxZoom: true
     }).setView(defaultCoords, 13);
 
     // Modern CARTO Voyager Tile Layer
@@ -569,6 +569,37 @@ document.addEventListener("DOMContentLoaded", () => {
             const marker = L.marker(defaultCoords, { icon: customPinIcon }).addTo(map);
             marker.bindPopup(`<b>${listingTitle}</b><br>${locationQuery}`);
         });
+
+    // Directional Pan & Recenter Custom Controls
+    let stayCoords = defaultCoords;
+
+    const PanControl = L.Control.extend({
+        options: { position: 'topright' },
+        onAdd: function (m) {
+            const container = L.DomUtil.create('div', 'leaflet-bar d-flex flex-column align-items-center gap-1 p-1.5 bg-white rounded-3 shadow-sm border');
+            container.innerHTML = `
+                <button type="button" id="btnPanUp" class="map-ctrl-btn" title="Pan Up"><i class="fa-solid fa-chevron-up"></i></button>
+                <div class="d-flex gap-1">
+                    <button type="button" id="btnPanLeft" class="map-ctrl-btn" title="Pan Left"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button type="button" id="btnRecenter" class="map-ctrl-btn bg-danger text-white border-0" title="Recenter on Stay"><i class="fa-solid fa-location-crosshairs"></i></button>
+                    <button type="button" id="btnPanRight" class="map-ctrl-btn" title="Pan Right"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <button type="button" id="btnPanDown" class="map-ctrl-btn" title="Pan Down"><i class="fa-solid fa-chevron-down"></i></button>
+            `;
+            L.DomEvent.disableClickPropagation(container);
+            return container;
+        }
+    });
+
+    map.addControl(new PanControl());
+
+    document.getElementById("btnPanUp").addEventListener("click", () => map.panBy([0, -180]));
+    document.getElementById("btnPanDown").addEventListener("click", () => map.panBy([0, 180]));
+    document.getElementById("btnPanLeft").addEventListener("click", () => map.panBy([-180, 0]));
+    document.getElementById("btnPanRight").addEventListener("click", () => map.panBy([180, 0]));
+    document.getElementById("btnRecenter").addEventListener("click", () => {
+        map.flyTo(stayCoords, 14, { animate: true, duration: 0.8 });
+    });
 });
 </script>
     </div>
