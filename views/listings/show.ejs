@@ -506,7 +506,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Leaflet Map Integration with Nominatim Geocoding
     const locationQuery = `<%= listing.location %>, <%= listing.country %>`;
     const listingTitle = `<%- listing.title.replace(/'/g, "\\'") %>`;
-    const defaultCoords = [20.5937, 78.9629]; // Default India fallback
+    let stayCoords = defaultCoords;
 
     const map = L.map('map', {
         zoomControl: true,
@@ -514,7 +514,7 @@ document.addEventListener("DOMContentLoaded", () => {
         touchZoom: true,
         dragging: true,
         doubleClickZoom: true,
-        boxZoom: true
+        tap: true
     }).setView(defaultCoords, 13);
 
     // Modern CARTO Voyager Tile Layer
@@ -545,9 +545,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 lon = defaultCoords[1];
             }
 
-            map.setView([lat, lon], 13);
+            stayCoords = [lat, lon];
+            map.setView(stayCoords, 13);
 
-            const marker = L.marker([lat, lon], { icon: customPinIcon }).addTo(map);
+            const marker = L.marker(stayCoords, { icon: customPinIcon }).addTo(map);
 
             const popupContent = `
                 <div class="p-2 text-center" style="max-width: 220px;">
