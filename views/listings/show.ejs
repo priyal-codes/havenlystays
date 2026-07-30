@@ -564,7 +564,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                         <% if(currUser && review.author && review.author._id.equals(currUser._id)) { %>
                                             <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" class="text-end mt-2">
-                                                <button class="btn btn-sm btn-link text-danger text-decoration-none p-0 fw-bold small">
+                                                <button type="submit" class="btn btn-sm btn-link text-danger text-decoration-none p-0 fw-bold small" onclick="this.disabled=true; this.innerHTML='<span class=\'spinner-border spinner-border-sm me-1\' role=\'status\' aria-hidden=\'true\'></span>Deleting...'; this.form.submit();">
                                                     <i class="fa-solid fa-trash me-1"></i>Delete Review
                                                 </button>
                                             </form>
