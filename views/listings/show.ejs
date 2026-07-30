@@ -346,15 +346,21 @@
                                 <input type="text" id="checkOutDate" name="booking[checkOut]" class="form-control form-control-sm border-0 bg-transparent fw-bold text-dark px-0 shadow-none cursor-pointer" placeholder="Select check-out" required readonly>
                             </div>
                         </div>
-                        <div class="border-top pt-2 mt-1">
-                            <label for="guestCount" class="form-label fw-bold text-dark extra-small mb-1 uppercase" style="font-size: 0.72rem; letter-spacing: 0.5px;">GUESTS</label>
-                            <select id="guestCount" name="booking[guests]" class="form-select form-select-sm border-0 bg-transparent fw-bold text-dark px-0 shadow-none">
-                                <option value="1" selected>1 Guest</option>
-                                <option value="2">2 Guests</option>
-                                <option value="3">3 Guests</option>
-                                <option value="4">4 Guests</option>
-                                <option value="5">5+ Guests</option>
-                            </select>
+                        <div class="border-top pt-2 mt-1 d-flex align-items-center justify-content-between">
+                            <div>
+                                <label class="form-label fw-bold text-dark extra-small mb-0 uppercase" style="font-size: 0.72rem; letter-spacing: 0.5px;">GUESTS</label>
+                                <div id="guestDisplayLabel" class="fw-bold text-dark fs-6">1 Guest</div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="button" class="btn btn-outline-secondary btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center shadow-none" id="btnMinusGuest" style="width: 32px; height: 32px;" disabled>
+                                    <i class="fa-solid fa-minus" style="font-size: 0.75rem;"></i>
+                                </button>
+                                <span id="guestNumCount" class="fw-bold text-dark fs-6 px-1">1</span>
+                                <button type="button" class="btn btn-outline-secondary btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center shadow-none" id="btnPlusGuest" style="width: 32px; height: 32px;">
+                                    <i class="fa-solid fa-plus" style="font-size: 0.75rem;"></i>
+                                </button>
+                            </div>
+                            <input type="hidden" name="booking[guests]" id="guestInput" value="1">
                         </div>
                     </div>
 
@@ -403,6 +409,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const dayAfter = new Date(tomorrow);
     dayAfter.setDate(dayAfter.getDate() + 1);
+
+    // Guest Stepper Controls
+    const btnMinus = document.getElementById("btnMinusGuest");
+    const btnPlus = document.getElementById("btnPlusGuest");
+    const guestNumCount = document.getElementById("guestNumCount");
+    const guestDisplayLabel = document.getElementById("guestDisplayLabel");
+    const guestInput = document.getElementById("guestInput");
+
+    let currentGuests = 1;
+    const maxGuests = 10;
+
+    if (btnMinus && btnPlus && guestInput) {
+        btnPlus.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (currentGuests < maxGuests) {
+                currentGuests++;
+                updateGuestUI();
+            }
+        });
+
+        btnMinus.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (currentGuests > 1) {
+                currentGuests--;
+                updateGuestUI();
+            }
+        });
+
+        function updateGuestUI() {
+            guestNumCount.innerText = currentGuests;
+            guestInput.value = currentGuests;
+            guestDisplayLabel.innerText = `${currentGuests} ${currentGuests === 1 ? 'Guest' : 'Guests'}`;
+            btnMinus.disabled = (currentGuests <= 1);
+            btnPlus.disabled = (currentGuests >= maxGuests);
+        }
+    }
 
     function updatePriceCalculation() {
         if (checkInFP && checkOutFP && checkInFP.selectedDates[0] && checkOutFP.selectedDates[0]) {
