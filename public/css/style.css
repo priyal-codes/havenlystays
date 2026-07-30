@@ -36,8 +36,8 @@ body{
     object-fit: cover !important;
 }
 
-.card-body{
-    padding: 0 !important;
+.stay-card .card-body {
+    padding: 1.25rem 1.35rem !important;
 }
 
 .card-text p{
