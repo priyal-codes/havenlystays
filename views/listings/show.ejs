@@ -474,6 +474,7 @@ document.addEventListener("DOMContentLoaded", () => {
         altFormat: "d-m-Y",
         altInputClass: "form-control form-control-sm border-0 bg-transparent fw-bold text-dark px-0 shadow-none cursor-pointer",
         defaultDate: tomorrow,
+        monthSelectorType: "static",
         onChange: function(selectedDates) {
             if (selectedDates[0]) {
                 const minCout = new Date(selectedDates[0]);
@@ -494,6 +495,7 @@ document.addEventListener("DOMContentLoaded", () => {
         altFormat: "d-m-Y",
         altInputClass: "form-control form-control-sm border-0 bg-transparent fw-bold text-dark px-0 shadow-none cursor-pointer",
         defaultDate: dayAfter,
+        monthSelectorType: "static",
         onChange: function() {
             updatePriceCalculation();
         }
